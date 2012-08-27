@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+    <h2>登录</h2>
+    <form action="/login" method="post">
+    <br />
+    电子邮件
+    <input type="text" name="email" value="">
+    <br />
+    密码
+    <input type="text" name="password" value="">
+    <br />
+    <input type="submit" value="登录">
+    </form>
+{% endblock %}

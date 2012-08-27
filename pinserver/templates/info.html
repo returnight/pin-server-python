@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block body %}
+    <p> {{ user.id }}
+    <p> {{ user.email }}
+    <p> {{ user.nickname }}
+    <p> {{ user.register_at | user_datetime }}
+{% endblock %}
