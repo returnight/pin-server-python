@@ -84,6 +84,8 @@ bcrypt = Bcrypt(app)
 # 初始化 Mongodb
 db = MongoEngine(app)
 
+# session 持久化
+session.permanent = True
 
 # models
 class User(db.Document):
