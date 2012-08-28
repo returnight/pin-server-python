@@ -84,8 +84,6 @@ bcrypt = Bcrypt(app)
 # 初始化 Mongodb
 db = MongoEngine(app)
 
-# session 持久化
-session.permanent = True
 
 # models
 class User(db.Document):
@@ -206,6 +204,7 @@ def login_post():
 
     if bcrypt.check_password_hash(user.password, request.form['password']):
         session['user_id'] = str(user.id)
+        session.permanent = True
         return user_response(user)
     else:
         err_msg = 'email or password error'
