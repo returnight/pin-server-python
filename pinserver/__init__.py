@@ -263,7 +263,7 @@ def user_info():
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('web_login'))
 
 @app.route('/upload', methods=['POST'])
 def upload_post():
