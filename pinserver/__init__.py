@@ -39,14 +39,21 @@
     --------
     bcrypt需要gcc和python-dev
     psycopg2需要libpq-dev
-    
+
     :author: Guo Peng (G_will) <g_will@ieqi.com> 
     :copyright: (c) 2012-2012 by Swipppe
+    
+    
+    Session
+    ---------
+    
+    # 此参数当写入session时配置
+    session.permanent = True
 
 """
 
 import os
-import json
+import ujson as json
 from datetime import datetime
 
 from flask import Flask
@@ -103,6 +110,16 @@ class User(db.Document):
     """
     username = db.StringField(max_length=32, unique=True)
     avatar = db.StringField(max_length=256)
+    
+    
+    # 地理
+    loc = db.ListField()
+    
+    # 绑定
+    auth = db.ListField(db.EmbeddedDocumentField(Auth))
+    
+    
+    # 0: 未知 1: 男 2: 女
     gender = db.IntField()
     currency = db.StringField(max_length=3)
     realname = db.StringField(max_length=32)
@@ -111,10 +128,18 @@ class User(db.Document):
     province = db.StringField(max_length=32)
     city = db.StringField(max_length=32)
     slogan = db.StringField()
-
-    status = db.IntField()
+    
+    
+    # 0: 未激活 1: 激活
+    status = db.IntField(default=1)
     """
 
+class Auth(db.EmbeddedDocument):
+    """
+    """
+    
+    type = db.StringField()
+    aid = db.StringField()
 
 # support functions
 @app.template_filter('user_datetime')
@@ -182,14 +207,19 @@ def reg_user_post():
                 password=password)
 
     user.save()
-
-    #response.headers
+    
+    user_id = str(user.id)
+    
+    session['user_id'] = user_id
+    session.permanent = True
+    
     user_data = {
-                'user_id':str(user.id),
+                'user_id':user_id,
                 'email':user.email,
                 'nickname':user.nickname,
                 }
     response = make_response(json.dumps(user_data))
+    #response.headers
     response.headers['Version'] = '1'
     return response
 
@@ -212,6 +242,24 @@ def login_post():
         err_msg = 'email or password error'
         return err_response(err_msg)
 
+@app.route('/user_info')
+def user_info():
+    if g.user:
+        user = g.user
+        user_id = str(user.id)
+        user_data = {
+                    'user_id':user_id,
+                    'email':user.email,
+                    'nickname':user.nickname,
+                    }
+        response = make_response(json.dumps(user_data))
+        #response.headers
+        response.headers['Version'] = '1'
+        return response
+    else:
+        err_msg = 'session expired'
+        return err_response(err_msg)
+        
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
@@ -224,6 +272,19 @@ def upload_post():
         # TODO filename should be fixed
         filename = file.filename
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file_url = app.config['FILE_URL'] % filename
+        response_data = {'file_url':file_url}
+        response = make_response(json.dumps(response_data))
+        response.headers['Version'] = '1'
+        return response
+        
+@app.route('/upload_avatar', methods=['POST'])
+def upload_avatar_post():
+    file = request.files['file']
+    if file:
+        # TODO filename should be fixed
+        filename = file.filename
+        file.save(os.path.join(app.config['AVATAR_UPLOAD_FOLDER'], filename))
         file_url = app.config['AVATAR_URL'] % filename
         response_data = {'avatar':file_url}
         response = make_response(json.dumps(response_data))
@@ -232,37 +293,49 @@ def upload_post():
 
 # for web test    
 @app.route('/web/reg', methods=['GET'])
-def reg_user():
+def web_reg_user():
     """
         用户注册 Web 界面
         ~~~~~~~~~~~~~~~~~
 
     """
     if g.user:
-        return redirect(url_for('info'))
+        return redirect(url_for('web_info'))
 
     return render_template('reg.html')
 
 @app.route('/web/login', methods=['GET'])
-def login():
+def web_login():
     if g.user:
-        return redirect(url_for('info'))
+        return redirect(url_for('web_info'))
     return render_template('login.html')
 
 @app.route('/web/info')
-def info():
+def web_info():
     if g.user:
         user = g.user
         return render_template('info.html', user=user)
-    return redirect(url_for('login'))
+    return redirect(url_for('web_login'))
 
 @app.route('/web/upload')
-def upload():
+def web_upload():
     return '''
     <!doctype html>
     <title>文件上传</title>
     <h1>文件上传</h1>
     <form action="/upload" method=post enctype=multipart/form-data>
+      <p><input type=file name=file>
+         <input type=submit value=Upload>
+    </form>
+    '''
+
+@app.route('/web/upload_avatar')
+def web_upload_avatar():
+    return '''
+    <!doctype html>
+    <title>头像上传</title>
+    <h1>头像上传</h1>
+    <form action="/upload_avatar" method=post enctype=multipart/form-data>
       <p><input type=file name=file>
          <input type=submit value=Upload>
     </form>

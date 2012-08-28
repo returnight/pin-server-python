@@ -19,11 +19,16 @@ class DefaultConfig(object):
     
     MONGODB_DB = 'pinserver'
     
-    UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/img/avatar'
+    UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static'
+    
+    FILE_URL = 'http://testapi.get-pin.com/static/%s'
+    
+    AVATAR_UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/img/avatar'
     
     AVATAR_URL = 'http://testapi.get-pin.com/static/img/avatar/%s'
     
-    PERMANENT_SESSION_LIFETIME = 30
+    # 3600*24*31 = 2678400
+    PERMANENT_SESSION_LIFETIME = 2678400
     
 class TestConfig(object):
     """
