@@ -23,6 +23,8 @@ class DefaultConfig(object):
     
     AVATAR_URL = 'http://testapi.get-pin.com/static/img/avatar/%s'
     
+    PERMANENT_SESSION_LIFETIME = 120
+    
 class TestConfig(object):
     """
     For test
