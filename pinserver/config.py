@@ -10,6 +10,8 @@
 
 """
 
+from datetime import timedelta
+
 class DefaultConfig(object):
     """
     Default configuration for Pin-server
@@ -23,7 +25,7 @@ class DefaultConfig(object):
     
     AVATAR_URL = 'http://testapi.get-pin.com/static/img/avatar/%s'
     
-    PERMANENT_SESSION_LIFETIME = 120
+    PERMANENT_SESSION_LIFETIME = timedelta(seconds=30)
     
 class TestConfig(object):
     """
