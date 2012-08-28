@@ -204,6 +204,8 @@ def login_post():
 
     if bcrypt.check_password_hash(user.password, request.form['password']):
         session['user_id'] = str(user.id)
+        
+        # 此参数当写入session时配置
         session.permanent = True
         return user_response(user)
     else:
