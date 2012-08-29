@@ -90,3 +90,7 @@ nosetests.xml
 *.egg
 *.deb
 *.rpm
+
+
+# static folder
+pinserver/static/
