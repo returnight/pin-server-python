@@ -106,10 +106,11 @@ class User(db.Document):
     password = db.StringField(max_length=64, required=True)
     nickname = db.StringField(max_length=32, required=True)
     register_at = db.DateTimeField(default=datetime.utcnow(), required=True)
-
+    avatar = db.StringField(max_length=256)
+    
     """
     username = db.StringField(max_length=32, unique=True)
-    avatar = db.StringField(max_length=256)
+    
     
     
     # 地理
@@ -169,10 +170,12 @@ def before_request():
     """
     每次请求前从session中提出用户信息
     """
-    g.user = None
+    g.user_id = None
     if 'user_id' in session:
-        user_id = session['user_id']
-        g.user = User.objects(id=user_id).first()
+        g.user_id = session['user_id']
+        
+        # 不必在这里取出用户信息，徒增负担
+        #g.user = User.objects(id=user_id).first()
 
 
 @app.route('/')
@@ -201,10 +204,16 @@ def reg_user_post():
     email = request.form['email']
     nickname = request.form['nickname']
     password = bcrypt.generate_password_hash(request.form['password'], 8)
+    
+    #avatar
+    avatar = ''
+    if request.form['avatar']:
+        avatar = request.form['avatar']
 
     user = User(email=email,
                 nickname=nickname,
-                password=password)
+                password=password,
+                avatar=avatar)
 
     user.save()
     
@@ -217,6 +226,7 @@ def reg_user_post():
                 'user_id':user_id,
                 'email':user.email,
                 'nickname':user.nickname,
+                'avatar':user.avatar,
                 }
     response = make_response(json.dumps(user_data))
     #response.headers
@@ -244,13 +254,14 @@ def login_post():
 
 @app.route('/user_info')
 def user_info():
-    if g.user:
-        user = g.user
+    if g.user_id:
+        user = User.objects(id=g.user_id).first()
         user_id = str(user.id)
         user_data = {
-                    'user_id':user_id,
-                    'email':user.email,
-                    'nickname':user.nickname,
+                     'user_id':user_id,
+                     'email':user.email,
+                     'nickname':user.nickname,
+                     'avatar':user.avatar,
                     }
         response = make_response(json.dumps(user_data))
         #response.headers
@@ -259,6 +270,22 @@ def user_info():
     else:
         err_msg = 'session expired'
         return err_response(err_msg)
+        
+@app.route('/avatar/<email>')
+def avata_url(email):
+    if '@' not in email:
+        err_msg = 'email error'
+        return err_response(err_msg)
+    
+    user = User.objects(email=email).first()
+
+    res_data = {
+                'avatar':user.avatar,
+               }
+    response = make_response(json.dumps(res_data))
+    #response.headers
+    response.headers['Version'] = '1'
+    return response
         
 @app.route('/logout')
 def logout():
@@ -299,21 +326,22 @@ def web_reg_user():
         ~~~~~~~~~~~~~~~~~
 
     """
-    if g.user:
+    if g.user_id:
         return redirect(url_for('web_info'))
 
     return render_template('reg.html')
 
 @app.route('/web/login', methods=['GET'])
 def web_login():
-    if g.user:
+    if g.user_id:
         return redirect(url_for('web_info'))
+        
     return render_template('login.html')
 
 @app.route('/web/info')
 def web_info():
-    if g.user:
-        user = g.user
+    if g.user_id:
+        user = User.objects(id=g.user_id).first()
         return render_template('info.html', user=user)
     return redirect(url_for('web_login'))
 
