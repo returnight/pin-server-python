@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+    <p> 用户信息
+    <p> {{ user.id }}
+    <p> {{ user.email }}
+    
+    <h2>修改信息</h2>
+    <p> 留空为不修改
+    <form action="/user_info" method="post">
+   
+    <br />
+    昵称
+    <input type="text" name="nickname" value="{{ user.nickname }}">
+    
+    <br />
+    头像（可以为空）
+    <input type="text" name="avatar" value="{{ user.avatar }}">
+    
+    <br />
+    <input type="submit" value="修改">
+    </form>
+{% endblock %}

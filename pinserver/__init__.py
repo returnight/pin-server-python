@@ -173,7 +173,12 @@ def before_request():
     g.user_id = None
     if 'user_id' in session:
         g.user_id = session['user_id']
-        
+    
+    #TODO
+    # 当没有session的时候处理
+    # else:
+    
+    
         # 不必在这里取出用户信息，徒增负担
         #g.user = User.objects(id=user_id).first()
 
@@ -271,6 +276,34 @@ def user_info():
         err_msg = 'session expired'
         return err_response(err_msg)
         
+@app.route('/user_info', methods=['POST'])
+def user_info_post():
+    if g.user_id:
+        user = User.objects(id=g.user_id).first()
+        
+        if request.form['nickname']:
+            user.nickname = request.form['nickname']
+            
+        if request.form['avatar']:
+            user.avatar = request.form['avatar']
+        
+        user.save()
+        
+        user_id = str(user.id)
+        user_data = {
+                     'user_id':user_id,
+                     'email':user.email,
+                     'nickname':user.nickname,
+                     'avatar':user.avatar,
+                    }
+        response = make_response(json.dumps(user_data))
+        #response.headers
+        response.headers['Version'] = '1'
+        return response
+    else:
+        err_msg = 'session expired'
+        return err_response(err_msg)
+        
 @app.route('/avatar/<email>')
 def avata_url(email):
     if '@' not in email:
@@ -343,6 +376,13 @@ def web_info():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         return render_template('info.html', user=user)
+    return redirect(url_for('web_login'))
+    
+@app.route('/web/set_info')
+def set_info():
+    if g.user_id:
+        user = User.objects(id=g.user_id).first()
+        return render_template('set_info.html', user=user)
     return redirect(url_for('web_login'))
 
 @app.route('/web/upload')
