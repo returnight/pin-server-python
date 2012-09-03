@@ -70,6 +70,7 @@ from flask.ext.mongoengine import MongoEngine
 
 
 from pinserver.config import DefaultConfig
+from pinserver.models import User
 
 # 建立应用
 app = Flask(__name__)
@@ -92,57 +93,7 @@ bcrypt = Bcrypt(app)
 db = MongoEngine(app)
 
 
-# models
-class User(db.Document):
-    """
-        User
-        ~~~~
-
-
-    """
-    meta = {'collection':'users'}
-
-    email = db.EmailField(required=True, unique=True)
-    password = db.StringField(max_length=64, required=True)
-    nickname = db.StringField(max_length=32, required=True)
-    register_at = db.DateTimeField(default=datetime.utcnow(), required=True)
-    avatar = db.StringField(max_length=256)
-    
-    """
-    username = db.StringField(max_length=32, unique=True)
-    
-    
-    
-    # 地理
-    loc = db.ListField()
-    
-    # 绑定
-    auth = db.ListField(db.EmbeddedDocumentField(Auth))
-    
-    
-    # 0: 未知 1: 男 2: 女
-    gender = db.IntField()
-    currency = db.StringField(max_length=3)
-    realname = db.StringField(max_length=32)
-    birthday = db.DateTimeField()
-    country = db.StringField(max_length=32)
-    province = db.StringField(max_length=32)
-    city = db.StringField(max_length=32)
-    slogan = db.StringField()
-    
-    
-    # 0: 未激活 1: 激活
-    status = db.IntField(default=1)
-    """
-
-class Auth(db.EmbeddedDocument):
-    """
-    """
-    
-    type = db.StringField()
-    aid = db.StringField()
-
-# support functions
+# helper functions
 @app.template_filter('user_datetime')
 def user_datetime(datetime):
     return datetime.strftime('%Y-%m-%d @ %H:%M')
