@@ -26,15 +26,15 @@ timeline = Blueprint('timeline', __name__)
 timeline.before_request(before_request)
 
 #TODO
-@timeline.route('/timeline', defaults={'user_id':''})
-def show_timeline(user_id):
-	if g.user_id:
-		return jsonify(user_id=g.user_id)
-	else:
-		err_msg = 'session timeout'
-		return jsonify(err_msg=err_msg)
+# @timeline.route('/timeline', defaults={'user_id':''})
+# def show_timeline(user_id):
+#     if g.user_id:
+#         return jsonify(user_id=g.user_id)
+#     else:
+#         err_msg = 'session timeout'
+#         return jsonify(err_msg=err_msg)
 
-@timeline.route('/timeline/<user_id>')
-def show_user_timeline(user_id):
-	timelines = Timeline.objects(owner.id=user_id).all()
+# @timeline.route('/timeline/<user_id>')
+# def show_user_timeline(user_id):
+#     timelines = Timeline.objects(owner.id=user_id).all()
 
