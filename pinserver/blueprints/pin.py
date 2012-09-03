@@ -58,7 +58,7 @@ def pin_post():
 @pin.route('/pins')
 def show_pins():
     if g.user_id:
-        pins = Pin.objects(owner.id=g.user_id)[:10]
+        pins = Pin.objects(owner=g.user_id)[:10]
         pin_list = []
         for pin in pins:
             pin_item = {}
