@@ -21,3 +21,4 @@ def before_request():
     g.user_id = None
     if 'user_id' in session:
         g.user_id = session['user_id']
+        

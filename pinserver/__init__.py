@@ -332,7 +332,7 @@ def web_info():
     return redirect(url_for('web_login'))
     
 @app.route('/web/set_info')
-def set_info():
+def web_set_info():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         return render_template('set_info.html', user=user)
@@ -364,3 +364,5 @@ def web_upload_avatar():
 
 from pinserver.blueprints.pin import pin
 app.register_blueprint(pin)
+from pinserver.blueprints.timeline import timeline
+app.register_blueprint(timeline)

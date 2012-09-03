@@ -27,8 +27,8 @@ class Pin(db.Document):
 
     #type 需要约定
     type = db.IntField(default=1)
-    content = db.StringField()
-    owner = db.ReferenceField(User)
+    content = db.StringField(required=True)
+    owner = db.ReferenceField(User, required=True)
     create_at = db.DateTimeField(default=datetime.utcnow(), required=True)
     
     """
