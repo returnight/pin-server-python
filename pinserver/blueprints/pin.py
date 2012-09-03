@@ -55,6 +55,16 @@ def pin_post():
         err_msg = 'session timeout'
         return jsonify(err_msg=err_msg)
 
+@pin.route('/del_pin/<pin_id>')
+def del_pin(pin_id):
+    if pin_id:
+        pin = Pin.objects(owner=g.user_id).first()
+        if pin:
+            pin.delete()
+            return jsonify(status='delete success')
+        return jsonify(err_msg='no this pin')
+    return jsonify(err_msg='no pin_id')
+
 @pin.route('/pins')
 def show_pins():
     if g.user_id:
