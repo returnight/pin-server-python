@@ -17,12 +17,10 @@ from flask import jsonify
 
 from flask.views import MethodView
 
-import pinserver
-
 from pinserver.helpers import before_request
 from pinserver.models.pin import Pin
 
-pin = Blueprint('pin', pinserver)
+pin = Blueprint('pin', __name__)
 
 pin.before_request(before_request)
 
