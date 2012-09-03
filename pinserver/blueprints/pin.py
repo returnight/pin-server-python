@@ -14,6 +14,7 @@
 from flask import Blueprint
 from flask import render_template
 from flask import jsonify
+from flask import g
 
 from flask.views import MethodView
 
