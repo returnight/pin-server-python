@@ -26,8 +26,8 @@ pin.before_request(before_request)
 
 #TODO
 @pin.route('/pin')
-	def show_pin():
-		if g.user_id:
-			return jsonify(user_id=g.user_id)
+def show_pin():
+	if g.user_id:
+		return jsonify(user_id=g.user_id)
 
 
