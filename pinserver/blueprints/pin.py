@@ -68,7 +68,7 @@ def web_pin():
         <title>发布Pin</title>
         <h1>发布Pin</h1>
         <form action="/pin" method=post>
-          <p><input type=text name=contect>
+          <p><input type=text name=content>
              <input type=submit value="发布">
         </form>    
         """
