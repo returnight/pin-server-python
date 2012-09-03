@@ -35,44 +35,44 @@ pin.before_request(before_request)
 
 @pin.route('/pin', methods=['POST'])
 def pin_post():
-	if g.user_id:
-		content = request.form['content']
-		owner = User.objects(id=g.user_id).first()
-		pin = Pin(content=content,
-				  owner=owner)
-		pin.save()
+    if g.user_id:
+        content = request.form['content']
+        owner = User.objects(id=g.user_id).first()
+        pin = Pin(content=content,
+                  owner=owner)
+        pin.save()
 
-		res_data = {
-					'pin_id':str(pin.id),
-					'content':pin.content,
-					'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
-					}
-		response = make_response(json.dumps(res_data))
-	    #response.headers
-	    response.headers['Version'] = '1'
-	    return response
-	else:
-		err_msg = 'session timeout'
-		return jsonify(err_msg=err_msg)
+        res_data = {
+                    'pin_id':str(pin.id),
+                    'content':pin.content,
+                    'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
+                    }
+        response = make_response(json.dumps(res_data))
+        #response.headers
+        response.headers['Version'] = '1'
+        return response
+    else:
+        err_msg = 'session timeout'
+        return jsonify(err_msg=err_msg)
 
 @pin.route('/pins')
 def show_pins():
-	if g.user_id:
-		return jsonify(user_id=g.user_id)
+    if g.user_id:
+        return jsonify(user_id=g.user_id)
 
 @pin.route('/web/pin')
 def web_pin():
-	if g.user_id:
-		return """
-		<!doctype html>
-	    <title>发布Pin</title>
-	    <h1>发布Pin</h1>
-	    <form action="/pin" method=post>
-	      <p><input type=text name=contect>
-	         <input type=submit value="发布g>
-	    </form>	
-		"""
-	return redirect(url_for('web_login'))
+    if g.user_id:
+        return """
+        <!doctype html>
+        <title>发布Pin</title>
+        <h1>发布Pin</h1>
+        <form action="/pin" method=post>
+          <p><input type=text name=contect>
+             <input type=submit value="发布g>
+        </form>    
+        """
+    return redirect(url_for('web_login'))
 
 
 
