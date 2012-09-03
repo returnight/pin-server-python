@@ -93,7 +93,7 @@ bcrypt = Bcrypt(app)
 db = MongoEngine(app)
 
 from pinserver.models.user import User
-
+#from pinserver.models.pin import Pin
 
 # helper functions
 @app.template_filter('user_datetime')
@@ -304,6 +304,8 @@ def upload_avatar_post():
         response.headers['Version'] = '1'
         return response
 
+@app.route('')
+
 # for web test    
 @app.route('/web/reg', methods=['GET'])
 def web_reg_user():
@@ -361,3 +363,6 @@ def web_upload_avatar():
          <input type=submit value=Upload>
     </form>
     '''
+
+from pinserver.blueprints.pin import pin
+app.register_blueprint(pin)
