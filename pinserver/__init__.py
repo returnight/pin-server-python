@@ -165,7 +165,7 @@ def reg_user_post():
     
     #avatar
     avatar = ''
-    if request.form['avatar']:
+    if 'avatar' in request.form:
         avatar = request.form['avatar']
 
     user = User(email=email,
