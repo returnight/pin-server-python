@@ -69,7 +69,7 @@ def web_pin():
         <h1>发布Pin</h1>
         <form action="/pin" method=post>
           <p><input type=text name=contect>
-             <input type=submit value="发布g>
+             <input type=submit value="发布">
         </form>    
         """
     return redirect(url_for('web_login'))
