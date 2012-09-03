@@ -18,6 +18,10 @@ from flask import render_template
 from flask import jsonify
 from flask import g
 from flask import make_response
+from flask import request
+from flask import session
+from flask import redirect
+from flask import url_for
 
 from flask.views import MethodView
 
@@ -43,7 +47,7 @@ def pin_post():
 					'content':pin.content,
 					'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
 					}
-		response = make_response(json.dumps(user_data))
+		response = make_response(json.dumps(res_data))
 	    #response.headers
 	    response.headers['Version'] = '1'
 	    return response
