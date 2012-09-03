@@ -58,7 +58,7 @@ def pin_post():
 @pin.route('/del_pin/<pin_id>')
 def del_pin(pin_id):
     if pin_id:
-        pin = Pin.objects(owner=g.user_id).first()
+        pin = Pin.objects(id=pin_id).first()
         if pin:
             pin.delete()
             return jsonify(status='delete success')
