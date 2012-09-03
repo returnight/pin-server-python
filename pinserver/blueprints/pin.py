@@ -17,6 +17,8 @@ from flask import jsonify
 
 from flask.views import MethodView
 
+import pinserver
+
 from pinserver.helpers import before_request
 from pinserver.models.pin import Pin
 
