@@ -33,6 +33,5 @@ def show_pin():
 
 @pin.route('/pin_path')
 def show_pin_path():
-	return jsonify(path=pin.root_path)
-
+	return render_template('pin/test.html')
 
