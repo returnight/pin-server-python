@@ -23,9 +23,9 @@ class DefaultConfig(object):
     
     FILE_URL = 'http://testapi.get-pin.com/static/%s'
     
-    AVATAR_UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/img/avatar'
+    AVATAR_UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/avatar'
     
-    AVATAR_URL = 'http://testapi.get-pin.com/static/img/avatar/%s'
+    AVATAR_URL = 'http://testapi.get-pin.com/static/avatar/%s'
     
     # 3600*24*31 = 2678400
     PERMANENT_SESSION_LIFETIME = 2678400
