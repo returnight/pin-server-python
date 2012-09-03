@@ -57,13 +57,13 @@ def pin_post():
 
 @pin.route('/del_pin/<pin_id>')
 def del_pin(pin_id):
-    if pin_id:
+    if len(pin_id) == 24:
         pin = Pin.objects(id=pin_id).first()
         if pin:
             pin.delete()
             return jsonify(status='delete success')
         return jsonify(err_msg='no this pin')
-    return jsonify(err_msg='no pin_id')
+    return jsonify(err_msg='need pin_id')
 
 @pin.route('/pins')
 def show_pins():
