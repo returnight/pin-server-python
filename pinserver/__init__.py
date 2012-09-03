@@ -304,8 +304,6 @@ def upload_avatar_post():
         response.headers['Version'] = '1'
         return response
 
-@app.route('')
-
 # for web test    
 @app.route('/web/reg', methods=['GET'])
 def web_reg_user():
