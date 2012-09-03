@@ -43,13 +43,13 @@ def pin_post():
         pin.save()
 
         res_data = {
-                    'pin_id':str(pin.id),
-                    'content':pin.content,
-                    'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
-                    }
+            'pin_id':str(pin.id),
+            'content':pin.content,
+            'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
+        }
         response = make_response(json.dumps(res_data))
         #response.headers
-        response.headers['Version'] = '1'
+        #response.headers['Version'] = '1'
         return response
     else:
         err_msg = 'session timeout'
@@ -58,7 +58,21 @@ def pin_post():
 @pin.route('/pins')
 def show_pins():
     if g.user_id:
-        return jsonify(user_id=g.user_id)
+        pins = Pin.objects(owner.id=g.user_id)[:10]
+        pin_list = []
+        for pin in pins:
+            pin_item = {}
+            pin_item['pin_id'] = str(pin.id)
+            pin_item['content'] = pin.content
+            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
+            pin_list.append(pin_item)
+        res_data = {
+            'total':len(pin_list),
+            'items':pin_list,
+        }
+        response = make_response(json.dumps(res_data))
+        return response
+    return redirect(url_for('web_login'))
 
 @pin.route('/web/pin')
 def web_pin():
