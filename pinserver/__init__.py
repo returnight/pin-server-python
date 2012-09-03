@@ -70,7 +70,7 @@ from flask.ext.mongoengine import MongoEngine
 
 
 from pinserver.config import DefaultConfig
-from pinserver.models.user import User
+#from pinserver.models.user import User
 
 # 建立应用
 app = Flask(__name__)
@@ -91,6 +91,8 @@ bcrypt = Bcrypt(app)
 
 # 初始化 Mongodb
 db = MongoEngine(app)
+
+from pinserver.models.user import User
 
 
 # helper functions
