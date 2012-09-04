@@ -12,6 +12,7 @@
 """
 
 import ujson as json
+from datetime import datetime
 from mongoengine import Q
 
 from flask import Blueprint
@@ -45,7 +46,8 @@ def pin_post():
         pin.save()
 
         timeline = Timeline(pin=pin,
-                            owner=owner)
+                            owner=owner
+                            create_at=datetime.utcnow())
         timeline.save()
 
         res_data = {
