@@ -12,6 +12,7 @@
 """
 
 import ujson as json
+from mongoengine import Q
 
 from flask import Blueprint
 from flask import render_template
@@ -92,7 +93,7 @@ def show_pins():
 @pin.route('/pins/before/<pin_id>')
 def show_pins_before(pin_id):
     if g.user_id:
-        pins = Pin.objects(Pin.Q(id__lt=pin_id)&Pin.Q(owner=g.user_id))[:5].order_by('-create_at')
+        pins = Pin.objects(Q(id__lt=pin_id)&Q(owner=g.user_id))[:5].order_by('-create_at')
         pin_list = []
         for pin in pins:
             pin_item = {}
