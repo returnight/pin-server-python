@@ -50,7 +50,7 @@ def pin_post():
         res_data = {
             'pin_id':str(pin.id),
             'content':pin.content,
-            'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f'),
         }
         response = make_response(json.dumps(res_data))
         #response.headers
@@ -92,7 +92,7 @@ def show_pins():
 @pin.route('/pins/before/<pin_id>')
 def show_pins_before(pin_id):
     if g.user_id:
-        pins = Pin.objects(id__lt=pin_id)[:5].order_by('-create_at')
+        pins = Pin.objects(Q(id__lt=pin_id)&Q(owner=g.user_id))[:5].order_by('-create_at')
         pin_list = []
         for pin in pins:
             pin_item = {}
