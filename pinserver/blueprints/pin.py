@@ -46,7 +46,7 @@ def pin_post():
         pin.save()
 
         timeline = Timeline(pin=pin,
-                            owner=owner
+                            owner=owner,
                             create_at=datetime.utcnow())
         timeline.save()
 
