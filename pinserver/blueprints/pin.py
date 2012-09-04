@@ -42,7 +42,8 @@ def pin_post():
         content = request.form['content']
         owner = User.objects(id=g.user_id).first()
         pin = Pin(content=content,
-                  owner=owner)
+                  owner=owner,
+                  create_at=datetime.utcnow())
         pin.save()
 
         timeline = Timeline(pin=pin,

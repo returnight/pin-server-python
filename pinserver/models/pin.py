@@ -32,7 +32,7 @@ class Pin(db.Document):
     type = db.IntField(default=1)
     content = db.StringField(required=True)
     owner = db.ReferenceField(User, required=True)
-    create_at = db.DateTimeField(default=datetime.utcnow(), required=True)
+    create_at = db.DateTimeField(required=True)
     
     """
     username = db.StringField(max_length=32, unique=True)
