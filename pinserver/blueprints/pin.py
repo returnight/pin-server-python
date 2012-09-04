@@ -79,7 +79,7 @@ def show_pins():
             pin_item = {}
             pin_item['pin_id'] = str(pin.id)
             pin_item['content'] = pin.content
-            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
+            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
             pin_list.append(pin_item)
         res_data = {
             'total':len(pin_list),
@@ -98,7 +98,7 @@ def show_pins_before(pin_id):
             pin_item = {}
             pin_item['pin_id'] = str(pin.id)
             pin_item['content'] = pin.content
-            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
+            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
             pin_list.append(pin_item)
         res_data = {
             'total':len(pin_list),
