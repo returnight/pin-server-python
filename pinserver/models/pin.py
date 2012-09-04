@@ -23,7 +23,9 @@ class Pin(db.Document):
 
 
     """
-    meta = {'collection':'pins'}
+    meta = {
+        'collection':'pins',
+    }
 
     #type 需要约定
     type = db.IntField(default=1)

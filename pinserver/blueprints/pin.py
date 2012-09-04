@@ -28,6 +28,7 @@ from flask.views import MethodView
 from pinserver.helpers import before_request
 from pinserver.models.user import User
 from pinserver.models.pin import Pin
+from pinserver.models.timeline import Timeline
 
 pin = Blueprint('pin', __name__)
 
@@ -41,6 +42,10 @@ def pin_post():
         pin = Pin(content=content,
                   owner=owner)
         pin.save()
+
+        timeline = Timeline(pin=pin,
+                            owner=owner)
+        timeline.save()
 
         res_data = {
             'pin_id':str(pin.id),
@@ -68,7 +73,7 @@ def del_pin(pin_id):
 @pin.route('/pins')
 def show_pins():
     if g.user_id:
-        pins = Pin.objects(owner=g.user_id)[:10]
+        pins = Pin.objects(owner=g.user_id)[:5].order_by('-create_at')
         pin_list = []
         for pin in pins:
             pin_item = {}
@@ -83,6 +88,7 @@ def show_pins():
         response = make_response(json.dumps(res_data))
         return response
     return redirect(url_for('web_login'))
+
 
 @pin.route('/web/pin')
 def web_pin():
