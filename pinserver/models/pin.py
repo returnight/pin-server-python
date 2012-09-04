@@ -25,6 +25,7 @@ class Pin(db.Document):
     """
     meta = {
         'collection':'pins',
+        'ordering':['-create_at'],
     }
 
     #type 需要约定

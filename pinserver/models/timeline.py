@@ -24,7 +24,10 @@ class Timeline(db.Document):
 
 
     """
-    meta = {'collection':'timeline'}
+    meta = {
+        'collection':'timeline',
+        'ordering':['-create_at'],
+    }
 
     pin = db.ReferenceField(Pin)
     owner = db.ReferenceField(User)

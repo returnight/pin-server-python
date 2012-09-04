@@ -87,8 +87,26 @@ def show_pins():
         }
         response = make_response(json.dumps(res_data))
         return response
-    return redirect(url_for('web_login'))
+    return ('show_pins session timeout', 400)
 
+@pin.route('/pins/before/<pin_id>')
+def show_pins_before(pin_id):
+    if g.user_id:
+        pins = Pin.objects(id__lt=pin_id)[:5].order_by('-create_at')
+        pin_list = []
+        for pin in pins:
+            pin_item = {}
+            pin_item['pin_id'] = str(pin.id)
+            pin_item['content'] = pin.content
+            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
+            pin_list.append(pin_item)
+        res_data = {
+            'total':len(pin_list),
+            'items':pin_list,
+        }
+        response = make_response(json.dumps(res_data))
+        return response
+    return ('show_pins_before session timeout', 400)
 
 @pin.route('/web/pin')
 def web_pin():
