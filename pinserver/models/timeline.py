@@ -31,7 +31,7 @@ class Timeline(db.Document):
 
     pin = db.ReferenceField(Pin)
     owner = db.ReferenceField(User)
-    create_at = db.DateTimeField(default=datetime.utcnow(), required=True)
+    create_at = db.DateTimeField(required=True)
     
     """
     username = db.StringField(max_length=32, unique=True)

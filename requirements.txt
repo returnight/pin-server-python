@@ -2,4 +2,5 @@ ujson
 flask
 flask-script
 flask-bcrypt
+flask-pymongo
 flask-mongoengine

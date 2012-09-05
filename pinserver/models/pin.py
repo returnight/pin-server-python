@@ -33,6 +33,7 @@ class Pin(db.Document):
     content = db.StringField(required=True)
     owner = db.ReferenceField(User, required=True)
     create_at = db.DateTimeField(required=True)
+    avatar = db.StringField()
     
     """
     username = db.StringField(max_length=32, unique=True)

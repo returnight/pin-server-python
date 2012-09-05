@@ -43,7 +43,8 @@ def pin_post():
         owner = User.objects(id=g.user_id).first()
         pin = Pin(content=content,
                   owner=owner,
-                  create_at=datetime.utcnow())
+                  create_at=datetime.utcnow(),
+                  avatar=owner.avatar)
         pin.save()
 
         timeline = Timeline(pin=pin,
@@ -54,6 +55,7 @@ def pin_post():
         res_data = {
             'pin_id':str(pin.id),
             'content':pin.content,
+            'avatar':pin.avatar,
             'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f'),
         }
         response = make_response(json.dumps(res_data))
@@ -70,6 +72,12 @@ def del_pin(pin_id):
         pin = Pin.objects(id=pin_id).first()
         if pin:
             pin.delete()
+
+            # delete pin from timeline
+            timelines = Timeline.objects(pin=pin_id)
+            for timeline in timelines:
+                timeline.delete()
+                  
             return jsonify(status='delete success')
         return jsonify(err_msg='no this pin')
     return jsonify(err_msg='need pin_id')
@@ -83,6 +91,7 @@ def show_pins():
             pin_item = {}
             pin_item['pin_id'] = str(pin.id)
             pin_item['content'] = pin.content
+            pin_item['avatar'] = pin.avatar
             pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
             pin_list.append(pin_item)
         res_data = {
@@ -102,6 +111,7 @@ def show_pins_before(pin_id):
             pin_item = {}
             pin_item['pin_id'] = str(pin.id)
             pin_item['content'] = pin.content
+            pin_item['avatar'] = pin.avatar
             pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
             pin_list.append(pin_item)
         res_data = {

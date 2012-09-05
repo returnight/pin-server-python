@@ -11,6 +11,8 @@
 
 """
 
+import ujson as json
+
 from flask import Blueprint
 from flask import render_template
 from flask import jsonify
@@ -26,15 +28,27 @@ timeline = Blueprint('timeline', __name__)
 timeline.before_request(before_request)
 
 #TODO
-# @timeline.route('/timeline', defaults={'user_id':''})
-# def show_timeline(user_id):
-#     if g.user_id:
-#         return jsonify(user_id=g.user_id)
-#     else:
-#         err_msg = 'session timeout'
-#         return jsonify(err_msg=err_msg)
+@timeline.route('/timeline')
+def show_timeline():
+    if g.user_id:
+        timelines = Timeline.objects(owner=g.user_id)[:5].order_by('-create_at')
+        timeline_list = []
+        for timeline in timelines:
+            timeline_item = {}
+            timeline_item['author'] = timeline.pin.owner.nickname
+            timeline_item['content'] = timeline.pin.content
+            timeline_item['avatar'] = timeline.pin.avatar
+            timeline_item['create_at'] = timeline.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
+            timeline_list.append(timeline_item)
+        res_data = {
+            'total':len(timeline_list),
+            'items':timeline_list,
+        }
+        return (json.dumps(res_data), 200)
+    else:
+        return ('timeline session timeout', 400)
 
 # @timeline.route('/timeline/<user_id>')
 # def show_user_timeline(user_id):
-#     timelines = Timeline.objects(owner.id=user_id).all()
+#     timelines = Timeline.objects(owner=user_id)
 

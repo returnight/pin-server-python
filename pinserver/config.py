@@ -17,7 +17,11 @@ class DefaultConfig(object):
     
     SECRET_KEY = '>{O\xcfx\xa2>\xd8uf4\xe9-\xe8.N\n\x91\xea\xdcV\xbaNb'
     
+    # for mongoengine
     MONGODB_DB = 'pinserver'
+
+    # for pymongo
+    MONGO_DBNAME = 'pinserver'
     
     UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static'
     

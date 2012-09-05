@@ -28,7 +28,7 @@ class User(db.Document):
     password = db.StringField(max_length=64, required=True)
     nickname = db.StringField(max_length=32, required=True)
     register_at = db.DateTimeField(default=datetime.utcnow(), required=True)
-    avatar = db.StringField(max_length=256)
+    avatar = db.StringField(default='',max_length=256)
     
     """
     username = db.StringField(max_length=32, unique=True)

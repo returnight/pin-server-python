@@ -67,6 +67,7 @@ from flask import make_response
 
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.mongoengine import MongoEngine
+from flask.ext.pymongo import PyMongo
 
 
 from pinserver.config import DefaultConfig
@@ -90,7 +91,10 @@ app.config.from_envvar('PIN_SERVER_SETTINGS', silent=True)
 bcrypt = Bcrypt(app)
 
 # 初始化 Mongodb
+# for mongoengine
 db = MongoEngine(app)
+# for pymongo
+mongo = PyMongo(app)
 
 from pinserver.models.user import User
 #from pinserver.models.pin import Pin
@@ -171,7 +175,8 @@ def reg_user_post():
     user = User(email=email,
                 nickname=nickname,
                 password=password,
-                avatar=avatar)
+                avatar=avatar,
+                register_at=datetime.utcnow())
 
     user.save()
     
