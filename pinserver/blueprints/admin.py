@@ -22,6 +22,8 @@ from flask import url_for
 from flask import Blueprint
 from flask import render_template
 
+from pinserver.models.user import User
+
 admin = Blueprint('admin', __name__)
 
 def check_basic_auth(username, password):
@@ -53,20 +55,36 @@ def admin_before_request():
 @requires_basic_auth
 def admin_login():
     session['admin'] = 'admin'
-    return redirect(url_for('admin.admin_index'))
+    return redirect(url_for('admin.admin_user'))
 
 # only for test
 @admin.route('/admin/')
 def admin_index():
     if g.admin:
-        return render_template('admin/index.html')
+        return redirect(url_for('admin.admin_user'))
     return redirect(url_for('admin.admin_login'))
 
 @admin.route('/admin/user/', defaults={'page':1})
 @admin.route('/admin/user/page/<int:page>')
 def admin_user(page):
-    pass
+    if g.admin:
+        perpage_num = 10
+        offset = (page - 1) * perpage_num
+        limit = page * perpage_num
+        users = User.objects()[offset:limit]
+        return render_template('admin/user.html', 
+                                users=users,
+                                page=page)
+    return redirect(url_for('admin.admin_login'))
 
-    
+
+
+@admin.route('/admin/del_user/<user_id>')
+def admin_del_user(user_id):
+    if g.admin:
+        user = User.objects(id=user_id).first()
+        user.delete()
+        return redirect(url_for('admin.admin_user'))
+    return redirect(url_for('admin.admin_login'))
 
     
