@@ -90,7 +90,7 @@ def admin_del_user(user_id):
         for pin in pins:
             pin.delete()
         timelines = Timeline.objects(owner=user_id)
-        from timeline in timelines:
+        for timeline in timelines:
             timeline.delete()
         return redirect(url_for('admin.admin_user'))
     return redirect(url_for('admin.admin_login'))
