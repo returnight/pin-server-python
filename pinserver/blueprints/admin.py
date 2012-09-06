@@ -73,7 +73,7 @@ def admin_user(page):
         perpage_num = 10
         offset = (page - 1) * perpage_num
         limit = page * perpage_num
-        users = User.objects()[offset:limit]
+        users = User.objects()[offset:limit].order_by('-register_at')
         return render_template('admin/user.html', 
                                 users=users,
                                 page=page)
