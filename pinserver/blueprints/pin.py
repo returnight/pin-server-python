@@ -102,7 +102,8 @@ def show_pins():
 @pin.route('/pins/before/<pin_id>')
 def show_pins_before(pin_id):
     if g.user_id:
-        pins = Pin.objects(Q(id__lt=pin_id)&Q(owner=g.user_id))[:5].order_by('-create_at')
+        time_tag = Pin.objects(id=pin_id).first().create_at
+        pins = Pin.objects(Q(create_at__lt=time_tag)&Q(owner=g.user_id))[:5].order_by('-create_at')
         pin_list = []
         for pin in pins:
             pin_item = {}
