@@ -215,7 +215,7 @@ def login_post():
         err_msg = 'email or password error'
         return err_response(err_msg)
 
-@app.route('/user_info')
+@app.route('/user')
 def user_info():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
@@ -234,7 +234,7 @@ def user_info():
         err_msg = 'session expired'
         return err_response(err_msg)
         
-@app.route('/user_info', methods=['POST'])
+@app.route('/user', methods=['POST'])
 def user_info_post():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
