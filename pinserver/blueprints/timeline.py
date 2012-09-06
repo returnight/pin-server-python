@@ -52,7 +52,8 @@ def show_timeline():
 @timeline.route('/timeline/before/<timeline_id>')
 def show_timeline_before(timeline_id):
     if g.user_id:
-        timelines = Timeline.objects(Q(id__lt=timeline_id)&Q(owner=g.user_id))[:5].order_by('-create_at')
+        time_tag = Timeline.objects(id=timeline_id).first().create_at
+        timelines = Timeline.objects(Q(create_at__lt=time_tag)&Q(owner=g.user_id))[:5].order_by('-create_at')
         timeline_list = []
         for timeline in timelines:
             timeline_item = {}
