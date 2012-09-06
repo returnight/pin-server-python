@@ -77,6 +77,24 @@
                             <a href="{{ url_for('admin.admin_user', page=page+1) }}">下一页 &rarr;</a>
                         </li>
                     </ul>
+                    {% elif page > 1 %}
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>user_id</th>
+                                <th>email</th>
+                                <th>nickname</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>                    
+                    <ul class="pager">
+                        <li class="previous{% if page==1 %} disabled{% endif %}">
+                            <a href="{{ url_for('admin.admin_user', page=page-1) }}">&larr; 上一页</a>
+                        </li>
+                    </ul>
                     {% endif %}
                 </div>
             </div>
