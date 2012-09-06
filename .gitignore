@@ -93,4 +93,5 @@ nosetests.xml
 
 
 # static folder
-pinserver/static/
+pinserver/static/upload
+pinserver/static/avatar

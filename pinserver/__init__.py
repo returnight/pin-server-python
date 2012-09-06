@@ -371,3 +371,5 @@ from pinserver.blueprints.pin import pin
 app.register_blueprint(pin)
 from pinserver.blueprints.timeline import timeline
 app.register_blueprint(timeline)
+from pinserver.blueprints.admin import admin
+app.register_blueprint(admin)

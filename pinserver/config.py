@@ -23,9 +23,9 @@ class DefaultConfig(object):
     # for pymongo
     MONGO_DBNAME = 'pinserver'
     
-    UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static'
+    UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/upload'
     
-    FILE_URL = 'http://testapi.get-pin.com/static/%s'
+    FILE_URL = 'http://testapi.get-pin.com/static/upload/%s'
     
     AVATAR_UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/avatar'
     
