@@ -23,6 +23,8 @@ from flask import Blueprint
 from flask import render_template
 
 from pinserver.models.user import User
+from pinserver.models.pin import Pin
+from pinserver.models.timeline import Timeline
 
 admin = Blueprint('admin', __name__)
 
@@ -84,6 +86,12 @@ def admin_del_user(user_id):
     if g.admin:
         user = User.objects(id=user_id).first()
         user.delete()
+        pins = Pin.objects(owner=user_id)
+        for pin in pins:
+            pin.delete()
+        timelines = Timeline.objects(owner=user_id)
+        from timeline in timelines:
+            timeline.delete()
         return redirect(url_for('admin.admin_user'))
     return redirect(url_for('admin.admin_login'))
 
