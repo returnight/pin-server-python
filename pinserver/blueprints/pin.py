@@ -16,7 +16,6 @@ from datetime import datetime
 from mongoengine import Q
 
 from flask import Blueprint
-from flask import render_template
 from flask import jsonify
 from flask import g
 from flask import make_response
@@ -24,8 +23,6 @@ from flask import request
 from flask import session
 from flask import redirect
 from flask import url_for
-
-from flask.views import MethodView
 
 from pinserver.helpers import before_request
 from pinserver.models.user import User
@@ -106,6 +103,46 @@ def show_pins():
 def show_pins_before(pin_id):
     if g.user_id:
         pins = Pin.objects(Q(id__lt=pin_id)&Q(owner=g.user_id))[:5].order_by('-create_at')
+        pin_list = []
+        for pin in pins:
+            pin_item = {}
+            pin_item['pin_id'] = str(pin.id)
+            pin_item['content'] = pin.content
+            pin_item['avatar'] = pin.avatar
+            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
+            pin_list.append(pin_item)
+        res_data = {
+            'total':len(pin_list),
+            'items':pin_list,
+        }
+        response = make_response(json.dumps(res_data))
+        return response
+    return ('show_pins_before session timeout', 400)
+
+@pin.route('/pins/user/<user_id>')
+def show_pins_user(user_id):
+    if g.user_id:
+        pins = Pin.objects(owner=user_id)[:5].order_by('-create_at')
+        pin_list = []
+        for pin in pins:
+            pin_item = {}
+            pin_item['pin_id'] = str(pin.id)
+            pin_item['content'] = pin.content
+            pin_item['avatar'] = pin.avatar
+            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
+            pin_list.append(pin_item)
+        res_data = {
+            'total':len(pin_list),
+            'items':pin_list,
+        }
+        response = make_response(json.dumps(res_data))
+        return response
+    return ('show_pins session timeout', 400)
+
+@pin.route('/pins/user/<user_id>/before/<pin_id>')
+def show_pins_user_before(user_id, pin_id):
+    if g.user_id:
+        pins = Pin.objects(Q(id__lt=pin_id)&Q(owner=user_id))[:5].order_by('-create_at')
         pin_list = []
         for pin in pins:
             pin_item = {}

@@ -55,10 +55,18 @@ def admin_login():
     session['admin'] = 'admin'
     return redirect(url_for('admin.admin_index'))
 
+# only for test
 @admin.route('/admin/')
 def admin_index():
     if g.admin:
         return render_template('admin/index.html')
     return redirect(url_for('admin.admin_login'))
+
+@admin.route('/admin/user/', defaults={'page':1})
+@admin.route('/admin/user/page/<int:page>')
+def admin_user(page):
+    pass
+
+    
 
     

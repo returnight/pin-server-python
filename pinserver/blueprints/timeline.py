@@ -12,6 +12,7 @@
 """
 
 import ujson as json
+from mongoengine import Q
 
 from flask import Blueprint
 from flask import render_template
@@ -35,6 +36,7 @@ def show_timeline():
         timeline_list = []
         for timeline in timelines:
             timeline_item = {}
+            timeline_item['tl_id'] = str(timeline.id)
             timeline_item['author'] = timeline.pin.owner.nickname
             timeline_item['content'] = timeline.pin.content
             timeline_item['avatar'] = timeline.pin.avatar
@@ -45,10 +47,26 @@ def show_timeline():
             'items':timeline_list,
         }
         return (json.dumps(res_data), 200)
-    else:
-        return ('timeline session timeout', 400)
+    return ('timeline session timeout', 400)
 
-# @timeline.route('/timeline/<user_id>')
-# def show_user_timeline(user_id):
-#     timelines = Timeline.objects(owner=user_id)
+@timeline.route('/timeline/before/<timeline_id>')
+def show_timeline_before(timeline_id):
+    if g.user_id:
+        timelines = Timeline.objects(Q(id__lt=timeline_id)&Q(owner=g.user_id))[:5].order_by('-create_at')
+        timeline_list = []
+        for timeline in timelines:
+            timeline_item = {}
+            timeline_item['tl_id'] = str(timeline.id)
+            timeline_item['author'] = timeline.pin.owner.nickname
+            timeline_item['content'] = timeline.pin.content
+            timeline_item['avatar'] = timeline.pin.avatar
+            timeline_item['create_at'] = timeline.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
+            timeline_list.append(timeline_item)
+        res_data = {
+            'total':len(timeline_list),
+            'items':timeline_list,
+        }
+        return (json.dumps(res_data), 200)
+    return ('timeline_before session timeout', 400)
+
 
