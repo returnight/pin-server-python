@@ -115,6 +115,7 @@ def user_response(user):
                 'user_id':str(user.id),
                 'email':user.email,
                 'nickname':user.nickname,
+                'avatar':user.avatar,
                 }
     response = make_response(json.dumps(user_data), 200)
     response.headers['Version'] = '1'
