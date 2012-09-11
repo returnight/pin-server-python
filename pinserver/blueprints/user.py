@@ -35,6 +35,16 @@ user = Blueprint('user', __name__)
 user.before_request(before_request)
 
 # support functions
+def user_response(user):
+    user_data = {
+                'user_id':str(user.id),
+                'email':user.email,
+                'nickname':user.nickname,
+                'avatar':user.avatar,
+                }
+    response = make_response(json.dumps(user_data), 200)
+    response.headers['Version'] = '1'
+    return response
 
 @user.route('/user/reg', methods=['POST'])
 def reg_user_post():
@@ -46,14 +56,11 @@ def reg_user_post():
 
     err_msg = None
     if not request.form['email']:
-        err_msg = 'no email'
-        return err_response(err_msg)
+        return ('no email', 400)
     if not request.form['nickname']:
-        err_msg = 'no nickname'
-        return err_response(err_msg)
+        return ('no nickname', 400)
     if not request.form['password']:
-        err_msg = 'no password'
-        return err_response(err_msg)
+        return ('no password', 400)
 
     email = request.form['email']
     nickname = request.form['nickname']
@@ -94,8 +101,7 @@ def login_post():
     user = User.objects(email=email).first()
 
     if not user:
-        err_msg = 'email or password error'
-        return err_response(err_msg)
+        return ('email or password error', 401)
 
     if bcrypt.check_password_hash(user.password, request.form['password']):
         session['user_id'] = str(user.id)
@@ -104,8 +110,7 @@ def login_post():
         session.permanent = True
         return user_response(user)
     else:
-        err_msg = 'email or password error'
-        return err_response(err_msg)
+        return ('email or password error', 401)
 
 @user.route('/user/info', methods=['GET'])
 def user_info():
@@ -123,8 +128,7 @@ def user_info():
         response.headers['Version'] = '1'
         return response
     else:
-        err_msg = 'session expired'
-        return err_response(err_msg)
+        return ('session expired', 400)
         
 @user.route('/user/info', methods=['POST'])
 def user_info_post():
@@ -151,14 +155,12 @@ def user_info_post():
         response.headers['Version'] = '1'
         return response
     else:
-        err_msg = 'session expired'
-        return err_response(err_msg)
+        return ('session expired', 400)
         
 @user.route('/user/avatar/<email>')
 def avata_url(email):
     if '@' not in email:
-        err_msg = 'email error'
-        return err_response(err_msg)
+        return ('email error', 400)
     
     user = User.objects(email=email).first()
 
