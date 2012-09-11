@@ -67,9 +67,11 @@ from flask import make_response
 
 from flask.ext.bcrypt import Bcrypt
 from flask.ext.mongoengine import MongoEngine
+from flask.ext.pymongo import PyMongo
 
 
 from pinserver.config import DefaultConfig
+#from pinserver.models.user import User
 
 # 建立应用
 app = Flask(__name__)
@@ -89,60 +91,15 @@ app.config.from_envvar('PIN_SERVER_SETTINGS', silent=True)
 bcrypt = Bcrypt(app)
 
 # 初始化 Mongodb
+# for mongoengine
 db = MongoEngine(app)
+# for pymongo
+mongo = PyMongo(app)
 
+from pinserver.models.user import User
+#from pinserver.models.pin import Pin
 
-# models
-class User(db.Document):
-    """
-        User
-        ~~~~
-
-
-    """
-    meta = {'collection':'users'}
-
-    email = db.EmailField(required=True, unique=True)
-    password = db.StringField(max_length=64, required=True)
-    nickname = db.StringField(max_length=32, required=True)
-    register_at = db.DateTimeField(default=datetime.utcnow(), required=True)
-    avatar = db.StringField(max_length=256)
-    
-    """
-    username = db.StringField(max_length=32, unique=True)
-    
-    
-    
-    # 地理
-    loc = db.ListField()
-    
-    # 绑定
-    auth = db.ListField(db.EmbeddedDocumentField(Auth))
-    
-    
-    # 0: 未知 1: 男 2: 女
-    gender = db.IntField()
-    currency = db.StringField(max_length=3)
-    realname = db.StringField(max_length=32)
-    birthday = db.DateTimeField()
-    country = db.StringField(max_length=32)
-    province = db.StringField(max_length=32)
-    city = db.StringField(max_length=32)
-    slogan = db.StringField()
-    
-    
-    # 0: 未激活 1: 激活
-    status = db.IntField(default=1)
-    """
-
-class Auth(db.EmbeddedDocument):
-    """
-    """
-    
-    type = db.StringField()
-    aid = db.StringField()
-
-# support functions
+# helper functions
 @app.template_filter('user_datetime')
 def user_datetime(datetime):
     return datetime.strftime('%Y-%m-%d @ %H:%M')
@@ -158,6 +115,7 @@ def user_response(user):
                 'user_id':str(user.id),
                 'email':user.email,
                 'nickname':user.nickname,
+                'avatar':user.avatar,
                 }
     response = make_response(json.dumps(user_data), 200)
     response.headers['Version'] = '1'
@@ -212,13 +170,14 @@ def reg_user_post():
     
     #avatar
     avatar = ''
-    if request.form['avatar']:
+    if 'avatar' in request.form:
         avatar = request.form['avatar']
 
     user = User(email=email,
                 nickname=nickname,
                 password=password,
-                avatar=avatar)
+                avatar=avatar,
+                register_at=datetime.utcnow())
 
     user.save()
     
@@ -257,7 +216,7 @@ def login_post():
         err_msg = 'email or password error'
         return err_response(err_msg)
 
-@app.route('/user_info')
+@app.route('/user')
 def user_info():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
@@ -276,7 +235,7 @@ def user_info():
         err_msg = 'session expired'
         return err_response(err_msg)
         
-@app.route('/user_info', methods=['POST'])
+@app.route('/user', methods=['POST'])
 def user_info_post():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
@@ -379,7 +338,7 @@ def web_info():
     return redirect(url_for('web_login'))
     
 @app.route('/web/set_info')
-def set_info():
+def web_set_info():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         return render_template('set_info.html', user=user)
@@ -408,3 +367,10 @@ def web_upload_avatar():
          <input type=submit value=Upload>
     </form>
     '''
+
+from pinserver.blueprints.pin import pin
+app.register_blueprint(pin)
+from pinserver.blueprints.timeline import timeline
+app.register_blueprint(timeline)
+from pinserver.blueprints.admin import admin
+app.register_blueprint(admin)

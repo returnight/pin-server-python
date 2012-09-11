@@ -17,15 +17,19 @@ class DefaultConfig(object):
     
     SECRET_KEY = '>{O\xcfx\xa2>\xd8uf4\xe9-\xe8.N\n\x91\xea\xdcV\xbaNb'
     
+    # for mongoengine
     MONGODB_DB = 'pinserver'
+
+    # for pymongo
+    MONGO_DBNAME = 'pinserver'
     
-    UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static'
+    UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/upload'
     
-    FILE_URL = 'http://testapi.get-pin.com/static/%s'
+    FILE_URL = 'http://testapi.get-pin.com/static/upload/%s'
     
-    AVATAR_UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/img/avatar'
+    AVATAR_UPLOAD_FOLDER = '/var/virenvs/pin-server/pinserver/pinserver/static/avatar'
     
-    AVATAR_URL = 'http://testapi.get-pin.com/static/img/avatar/%s'
+    AVATAR_URL = 'http://testapi.get-pin.com/static/avatar/%s'
     
     # 3600*24*31 = 2678400
     PERMANENT_SESSION_LIFETIME = 2678400
