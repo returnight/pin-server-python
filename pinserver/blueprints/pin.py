@@ -33,6 +33,22 @@ pin = Blueprint('pin', __name__)
 
 pin.before_request(before_request)
 
+#support functions
+def pins_pack(pins):
+    pin_list = []
+    for pin in pins:
+        pin_item = {}
+        pin_item['pin_id'] = str(pin.id)
+        pin_item['content'] = pin.content
+        pin_item['avatar'] = pin.avatar
+        pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
+        pin_list.append(pin_item)
+    res_data = {
+        'total':len(pin_list),
+        'items':pin_list,
+    }
+    return res_data
+
 @pin.route('/pin', methods=['POST'])
 def pin_post():
     if g.user_id:
@@ -83,18 +99,7 @@ def del_pin(pin_id):
 def show_pins():
     if g.user_id:
         pins = Pin.objects(owner=g.user_id)[:5].order_by('-create_at')
-        pin_list = []
-        for pin in pins:
-            pin_item = {}
-            pin_item['pin_id'] = str(pin.id)
-            pin_item['content'] = pin.content
-            pin_item['avatar'] = pin.avatar
-            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
-            pin_list.append(pin_item)
-        res_data = {
-            'total':len(pin_list),
-            'items':pin_list,
-        }
+        res_data = pins_pack(pins)
         response = make_response(json.dumps(res_data))
         return response
     return ('show_pins session timeout', 400)
@@ -104,18 +109,7 @@ def show_pins_before(pin_id):
     if g.user_id:
         time_tag = Pin.objects(id=pin_id).first().create_at
         pins = Pin.objects(Q(create_at__lt=time_tag)&Q(owner=g.user_id))[:5].order_by('-create_at')
-        pin_list = []
-        for pin in pins:
-            pin_item = {}
-            pin_item['pin_id'] = str(pin.id)
-            pin_item['content'] = pin.content
-            pin_item['avatar'] = pin.avatar
-            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
-            pin_list.append(pin_item)
-        res_data = {
-            'total':len(pin_list),
-            'items':pin_list,
-        }
+        res_data = pins_pack(pins)
         response = make_response(json.dumps(res_data))
         return response
     return ('show_pins_before session timeout', 400)
@@ -124,18 +118,7 @@ def show_pins_before(pin_id):
 def show_pins_user(user_id):
     if g.user_id:
         pins = Pin.objects(owner=user_id)[:5].order_by('-create_at')
-        pin_list = []
-        for pin in pins:
-            pin_item = {}
-            pin_item['pin_id'] = str(pin.id)
-            pin_item['content'] = pin.content
-            pin_item['avatar'] = pin.avatar
-            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
-            pin_list.append(pin_item)
-        res_data = {
-            'total':len(pin_list),
-            'items':pin_list,
-        }
+        res_data = pins_pack(pins)
         response = make_response(json.dumps(res_data))
         return response
     return ('show_pins session timeout', 400)
@@ -145,18 +128,7 @@ def show_pins_user_before(user_id, pin_id):
     if g.user_id:
         time_tag = Pin.objects(id=pin_id).first().create_at
         pins = Pin.objects(Q(create_at__lt=time_tag)&Q(owner=user_id))[:5].order_by('-create_at')
-        pin_list = []
-        for pin in pins:
-            pin_item = {}
-            pin_item['pin_id'] = str(pin.id)
-            pin_item['content'] = pin.content
-            pin_item['avatar'] = pin.avatar
-            pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
-            pin_list.append(pin_item)
-        res_data = {
-            'total':len(pin_list),
-            'items':pin_list,
-        }
+        res_data = pins_pack(pins)
         response = make_response(json.dumps(res_data))
         return response
     return ('show_pins_before session timeout', 400)
