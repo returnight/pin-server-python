@@ -12,8 +12,7 @@
 
 from datetime import datetime
 
-from pinserver import db
-
+from pinserver.extensions import db
 from pinserver.models.user import User
 
 class Pin(db.Document):
