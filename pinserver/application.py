@@ -90,6 +90,8 @@ def create_app(config=None, app_name=None, blueprints=None):
 
     configure_blueprints(app, blueprints)
 
+    legacy(app)
+
     return app
 
 
