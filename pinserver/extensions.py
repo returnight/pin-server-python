@@ -11,6 +11,9 @@
 """
 
 from flask.ext.bcrypt import Bcrypt
-
+from flask.ext.mongoengine import MongoEngine
+from flask.ext.pymongo import PyMongo
 
 bcrypt = Bcrypt()
+db = MongoEngine()
+mongo = PyMongo()
