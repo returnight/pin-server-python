@@ -34,7 +34,7 @@ def timeline_pack(timelines):
     for timeline in timelines:
         timeline_item = {}
         timeline_item['tl_id'] = str(timeline.id)
-        timeline_item['pin_id'] = str(timelines.pin.id)
+        timeline_item['pin_id'] = str(timeline.pin.id)
         timeline_item['author'] = timeline.pin.owner.nickname
         timeline_item['content'] = timeline.pin.content
         timeline_item['avatar'] = timeline.pin.avatar
