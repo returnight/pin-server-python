@@ -367,7 +367,8 @@ def web_upload_avatar():
          <input type=submit value=Upload>
     </form>
     '''
-
+from pinserver.blueprints.user import user
+app.register_blueprint(user)
 from pinserver.blueprints.pin import pin
 app.register_blueprint(pin)
 from pinserver.blueprints.timeline import timeline
