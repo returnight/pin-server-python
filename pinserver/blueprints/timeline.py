@@ -38,7 +38,7 @@ def timeline_pack(timelines):
         timeline_item['author'] = timeline.pin.owner.nickname
         timeline_item['content'] = timeline.pin.content
         timeline_item['avatar'] = timeline.pin.avatar
-        timeline_item['create_at'] = timeline.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
+        timeline_item['create_at'] = timeline.create_at.strftime('%Y-%m-%d %H:%M:%S')
         timeline_list.append(timeline_item)
     res_data = {
         'total':len(timeline_list),

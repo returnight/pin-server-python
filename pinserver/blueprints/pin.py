@@ -41,7 +41,7 @@ def pins_pack(pins):
         pin_item['pin_id'] = str(pin.id)
         pin_item['content'] = pin.content
         pin_item['avatar'] = pin.avatar
-        pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f')
+        pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
         pin_list.append(pin_item)
     res_data = {
         'total':len(pin_list),
@@ -71,7 +71,7 @@ def pin_post():
             'pin_id':str(pin.id),
             'content':pin.content,
             'avatar':pin.avatar,
-            'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S.%f'),
+            'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
         response = make_response(json.dumps(res_data))
         #response.headers
