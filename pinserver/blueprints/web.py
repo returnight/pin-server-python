@@ -28,6 +28,10 @@ web = Blueprint('web', __name__)
 
 web.before_request(before_request)
 
+@web.template_filter('user_datetime')
+def user_datetime(datetime):
+    return datetime.strftime('%Y-%m-%d @ %H:%M')
+
 # for web test    
 @web.route('/web/reg', methods=['GET'])
 def web_reg_user():
