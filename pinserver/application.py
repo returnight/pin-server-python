@@ -130,5 +130,8 @@ def legacy(app):
     def index():
         return 'Hello world'
 
+    @app.template_filter('user_datetime')
+    def user_datetime(datetime):
+        return datetime.strftime('%Y-%m-%d @ %H:%M')
     
 
