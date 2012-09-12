@@ -67,7 +67,7 @@ def relation_follow(user_id):
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         follower = User.objects(id=user_id).first()
-        User.objects(id=g.user_id).update_one(push__followers=follower, inc__follower_count=1)
+        User.objects(id=g.user_id).update_one(push__followers=follower, inc__followers_count=1)
         User.objects(id=user_id).update_one(push__fans=user, inc__fans_count=1)
 
         return ('follow success', 200)
@@ -78,7 +78,7 @@ def relation_unfollow(user_id):
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         follower = User.objects(id=user_id).first()
-        User.objects(id=g.user_id).update_one(pull__followers=follower, inc__follower_count=-1)
+        User.objects(id=g.user_id).update_one(pull__followers=follower, inc__followers_count=-1)
         User.objects(id=user_id).update_one(pull__fans=user, inc__fans_count=-1)
 
 @relation.route('/relation/followers', defaults={'page_num':1})
