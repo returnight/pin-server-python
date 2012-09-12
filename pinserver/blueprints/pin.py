@@ -65,6 +65,8 @@ def pin_post():
                             create_at=datetime.utcnow())
         timeline.save()
 
+        owner.update(inc__pins_count=1)
+
         res_data = {
             'pin_id':str(pin.id),
             'content':pin.content,
