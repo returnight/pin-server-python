@@ -87,7 +87,7 @@ def relation_followers(page_num):
     if g.user_id:
         limit = 5 
         offset = (page_num - 1) * limit
-        user = User.objects(id=g.user_id).fields(slice__followers=[offset, limit])
+        user = User.objects(id=g.user_id).fields(slice__followers=[offset, limit]).first()
         followers = user.followers
         res_data = followers_pack(followers)
         return (json.dumps(res_data), 200)
