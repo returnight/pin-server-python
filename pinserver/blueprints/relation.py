@@ -86,9 +86,8 @@ def relation_unfollow(user_id):
 def relation_followers(page_num):
     if g.user_id:
         limit = 5 
-        start = (page_num - 1) * limit
-        end = page_num * limit
-        followers = User.objects(id=g.user_id).fields(slice__followers=[start, end])
+        offset = (page_num - 1) * limit
+        followers = User.objects(id=g.user_id).fields(slice__followers=[offset, limit])
 
         res_data = followers_pack(followers)
         return (json.dumps(res_data), 200)
@@ -99,9 +98,8 @@ def relation_followers(page_num):
 def relation_fans(page_num):
     if g.user_id:
         limit = 5 
-        start = (page_num - 1) * limit
-        end = page_num * limit
-        fans = User.objects(id=g.user_id).fields(slice__fans=[start, end])
+        offset = (page_num - 1) * limit
+        fans = User.objects(id=g.user_id).fields(slice__fans=[offset, end])
 
         res_data = fans_pack(fans)
         return (json.dumps(res_data), 200)
