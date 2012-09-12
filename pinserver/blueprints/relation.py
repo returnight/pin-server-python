@@ -87,8 +87,8 @@ def relation_followers(page_num):
     if g.user_id:
         limit = 5 
         offset = (page_num - 1) * limit
-        followers = User.objects(id=g.user_id).fields(slice__followers=[offset, limit])
-
+        user = User.objects(id=g.user_id).fields(slice__followers=[offset, limit])
+        followers = user.followers
         res_data = followers_pack(followers)
         return (json.dumps(res_data), 200)
     return ('followers list session timeout', 400)
@@ -99,7 +99,7 @@ def relation_fans(page_num):
     if g.user_id:
         limit = 5 
         offset = (page_num - 1) * limit
-        fans = User.objects(id=g.user_id).fields(slice__fans=[offset, end])
+        fans = User.objects(id=g.user_id).fields(slice__fans=[offset, limit])
 
         res_data = fans_pack(fans)
         return (json.dumps(res_data), 200)
