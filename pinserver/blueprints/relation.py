@@ -80,10 +80,12 @@ def relation_follow(user_id):
 @relation.route('/relation/unfollow/<user_id>')
 def relation_unfollow(user_id):
     if g.user_id:
-        user = User.objects(id=g.user_id).first()
         follower = User.objects(id=user_id).first()
+        user = User.objects(id=g.user_id).first()
         User.objects(id=g.user_id).update_one(pull__followers=follower, inc__followers_count=-1)
         User.objects(id=user_id).update_one(pull__fans=user, inc__fans_count=-1)
+        return ('unfollow success', 200)
+    return ('unfollow session timeout', 400)
 
 @relation.route('/relation/followers', defaults={'page_num':1})
 @relation.route('/relation/followers/page/<int:page_num>')
