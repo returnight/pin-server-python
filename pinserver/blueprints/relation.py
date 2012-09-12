@@ -65,12 +65,16 @@ def fans_pack(fans):
 @relation.route('/relation/follow/<user_id>')
 def relation_follow(user_id):
     if g.user_id:
-        user = User.objects(id=g.user_id).first()
-        follower = User.objects(id=user_id).first()
-        User.objects(id=g.user_id).update_one(push__followers=follower, inc__followers_count=1)
-        User.objects(id=user_id).update_one(push__fans=user, inc__fans_count=1)
 
-        return ('follow success', 200)
+        follower = User.objects(id=user_id).first()
+        user = User.objects(id=g.user_id, followers__nin=[follower]).first()
+        if user:
+        
+            User.objects(id=g.user_id).update_one(push__followers=follower, inc__followers_count=1)
+            User.objects(id=user_id).update_one(push__fans=user, inc__fans_count=1)
+
+            return ('follow success', 200)
+        return ('already followed', 400)
     return ('relation follow session timeout', 401)
 
 @relation.route('/relation/unfollow/<user_id>')
@@ -99,8 +103,8 @@ def relation_fans(page_num):
     if g.user_id:
         limit = 5 
         offset = (page_num - 1) * limit
-        fans = User.objects(id=g.user_id).fields(slice__fans=[offset, limit])
-
+        user = User.objects(id=g.user_id).fields(slice__fans=[offset, limit]).first()
+        fans = user.fans
         res_data = fans_pack(fans)
         return (json.dumps(res_data), 200)
     return ('fans list session timeout', 400)
