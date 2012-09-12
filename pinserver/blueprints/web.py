@@ -20,9 +20,13 @@ from flask import url_for
 from flask import Blueprint
 from flask import render_template
 
+from pinserver.helpers import before_request
+
 from pinserver.models.user import User
 
 web = Blueprint('web', __name__)
+
+web.before_request(before_request)
 
 # for web test    
 @web.route('/web/reg', methods=['GET'])
