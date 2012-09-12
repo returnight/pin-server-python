@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    admin.py
+    web.py
     ~~~~~~~~~~~~~
     
-    Pinserver Blueprints admin
+    Pinserver Blueprints web
 
     :author: Guo Peng (G_will) <g_will@ieqi.com> 
     :copyright: (c) 2012-2012 by Swipppe
