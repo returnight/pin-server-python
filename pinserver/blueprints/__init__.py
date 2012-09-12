@@ -13,4 +13,5 @@
 from .user import user
 from .pin import pin
 from .timeline import timeline
+from .upload import upload
 from .admin import admin

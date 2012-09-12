@@ -66,6 +66,7 @@ DEFAULT_BLUEPRINTS = (
     (blueprints.user, ''),
     (blueprints.pin, ''),
     (blueprints.timeline, ''),
+    (blueprints.upload, ''),
     (blueprints.admin, ''),
 )
 
