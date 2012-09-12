@@ -68,6 +68,7 @@ DEFAULT_BLUEPRINTS = (
     (blueprints.timeline, ''),
     (blueprints.upload, ''),
     (blueprints.admin, ''),
+    (blueprints.web, ''),
 )
 
 def create_app(config=None, app_name=None, blueprints=None):
