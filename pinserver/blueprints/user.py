@@ -46,7 +46,7 @@ def user_response(user):
     response.headers['Version'] = '1'
     return response
 
-@user.route('/user/reg', methods=['POST'])
+@user.route('/reg', methods=['POST'])
 def reg_user_post():
     """
         用户注册表单接收
@@ -95,7 +95,7 @@ def reg_user_post():
     response.headers['Version'] = '1'
     return response
 
-@user.route('/user/login', methods=['POST'])
+@user.route('/login', methods=['POST'])
 def login_post():
     email = request.form['email']
     user = User.objects(email=email).first()
@@ -112,7 +112,7 @@ def login_post():
     else:
         return ('email or password error', 401)
 
-@user.route('/user/info', methods=['GET'])
+@user.route('/user', methods=['GET'])
 def user_info():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
@@ -130,7 +130,7 @@ def user_info():
     else:
         return ('session expired', 400)
         
-@user.route('/user/info', methods=['POST'])
+@user.route('/user', methods=['POST'])
 def user_info_post():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
@@ -157,10 +157,12 @@ def user_info_post():
     else:
         return ('session expired', 400)
         
-@user.route('/user/avatar/<email>')
+@user.route('/avatar/<email>')
 def avata_url(email):
     if '@' not in email:
         return ('email error', 400)
+
+
     
     user = User.objects(email=email).first()
 
@@ -172,7 +174,7 @@ def avata_url(email):
     response.headers['Version'] = '1'
     return response
         
-@user.route('/user/logout')
+@user.route('/logout')
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('web_login'))
