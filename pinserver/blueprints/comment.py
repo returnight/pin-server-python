@@ -102,7 +102,7 @@ def comments_mine(page_num):
 
 @comment.route('/comments/user/<user_id>', defaults={'page_num':1})
 @comment.route('/comments/user/<user_id>/page/<int:page_num>')
-def comments_mine(user_id, page_num):
+def comments_user(user_id, page_num):
     if g.user_id:
         limit = 5
         start = (page_num - 1) * limit
