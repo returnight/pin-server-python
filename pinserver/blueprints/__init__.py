@@ -12,6 +12,7 @@
 
 from .user import user
 from .pin import pin
+from .comment import comment
 from .timeline import timeline
 from .relation import relation
 from .upload import upload

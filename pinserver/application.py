@@ -65,6 +65,7 @@ DEFAULT_APP_NAME = 'pinserver'
 DEFAULT_BLUEPRINTS = (
     (blueprints.user, ''),
     (blueprints.pin, ''),
+    (blueprints.comment, ''),
     (blueprints.timeline, ''),
     (blueprints.relation, ''),
     (blueprints.upload, ''),
