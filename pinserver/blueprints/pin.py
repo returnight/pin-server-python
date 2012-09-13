@@ -51,6 +51,30 @@ def pins_pack(pins):
     }
     return res_data
 
+def pins_isliked_pack(pins, user):
+    pin_list = []
+    for pin in pins:
+        pin_item = {}
+
+        isliked = pin.filter(likes__in=[user])
+
+        pin_item['isliked'] = 0
+        if isliked:
+            pin_item['isliked'] = 1
+
+        pin_item['pin_id'] = str(pin.id)
+        pin_item['type'] = pin.type
+        pin_item['content'] = pin.content
+        pin_item['pic'] = pin.pic
+        pin_item['avatar'] = pin.avatar
+        pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
+        pin_list.append(pin_item)
+    res_data = {
+        'total':len(pin_list),
+        'items':pin_list,
+    }
+    return res_data
+
 @pin.route('/pin', methods=['POST'])
 def pin_post():
     if g.user_id:
@@ -119,8 +143,9 @@ def del_pin(pin_id):
 @pin.route('/pins')
 def show_pins():
     if g.user_id:
+        user = User.objects(id=g.user_id).first()
         pins = Pin.objects(owner=g.user_id)[:5].order_by('-create_at')
-        res_data = pins_pack(pins)
+        res_data = pins_isliked_pack(pins, user)
         response = make_response(json.dumps(res_data))
         return response
     return ('show_pins session timeout', 400)
