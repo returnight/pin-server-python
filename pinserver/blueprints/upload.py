@@ -12,6 +12,7 @@
 """
 
 import os
+import ujson as json
 
 from flask import request
 from flask import session
