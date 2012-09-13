@@ -54,7 +54,11 @@ def pins_pack(pins):
 def pin_post():
     if g.user_id:
         content = request.form['content']
-        pic = request.form['pic']
+
+        if 'pic' in request.form:
+            pic = request.form['pic']
+        else:
+            pic = ''
 
         owner = User.objects(id=g.user_id).first()
         pin = Pin(content=content,
