@@ -57,7 +57,7 @@ def pin_post():
 
         pin_type = 1
         if 'type' in request.form:
-            pin_type = request.form['type']
+            pin_type = int(request.form['type'])
 
         content = ''
         if 'content' in request.form:
@@ -205,7 +205,10 @@ def web_pin():
         <title>发布Pin</title>
         <h1>发布Pin</h1>
         <form action="/pin" method=post>
-          <p><input type=text name=content>
+          <p>
+             <input type=text name=type>
+             <input type=text name=content>
+             <input type=text name=pic>
              <input type=submit value="发布">
         </form>    
         """
