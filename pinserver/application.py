@@ -68,6 +68,7 @@ DEFAULT_BLUEPRINTS = (
     (blueprints.comment, ''),
     (blueprints.timeline, ''),
     (blueprints.relation, ''),
+    (blueprints.fav, ''),
     (blueprints.upload, ''),
     (blueprints.admin, ''),
     (blueprints.web, ''),

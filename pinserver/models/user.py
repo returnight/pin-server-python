@@ -38,6 +38,8 @@ class User(db.Document):
     fans = db.ListField(db.ReferenceField('self'))
     fans_count = db.IntField(default=0)
 
+    favs_count = db.IntField(default=0)
+
     """
     username = db.StringField(max_length=32, unique=True)
     
