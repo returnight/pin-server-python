@@ -70,6 +70,8 @@ def relation_follow(user_id):
         user = User.objects(id=g.user_id, followers__nin=[follower]).first()
         if user:
         
+            #TODO need optim
+            # user.update(***)
             User.objects(id=g.user_id).update_one(push__followers=follower, inc__followers_count=1)
             User.objects(id=user_id).update_one(push__fans=user, inc__fans_count=1)
 

@@ -33,6 +33,12 @@ class Pin(db.Document):
     owner = db.ReferenceField(User, required=True)
     create_at = db.DateTimeField(required=True)
     avatar = db.StringField()
+
+    likes_count = db.IntField(default=0)
+    likes = db.ListField(db.ReferenceField(User))
+
+    # 地理  经，纬 [x, y]
+    # loc = db.ListField()
     
     """
     username = db.StringField(max_length=32, unique=True)

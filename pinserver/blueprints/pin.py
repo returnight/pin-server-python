@@ -135,6 +135,49 @@ def show_pins_user_before(user_id, pin_id):
         return response
     return ('show_pins_before session timeout', 400)
 
+# like
+@pin.route('/like/<pin_id>')
+def like_pin(pin_id):
+    if g.user_id:
+        user = User.objects(id=g.user_id).first()
+        pin = Pin.objects(id=pin_id, likes__nin=[user]).first()
+        if pin:
+            pin.update(push__likes=user, inc__likes_count=1)
+            return ('like success', 200)
+        return ('already liked', 400)
+    return ('like pin session timeout', 400)
+
+@pin.route('/unlike/<pin_id>')
+def unlike_pin(pin_id):
+    if g.user_id:
+        user = User.objects(id=g.user_id).first()
+        pin = Pin.objects(id=pin_id).first()
+        pin.update(pull__likes=user, inc__likes_count=-1)
+        return ('unlike success', 200)
+    return ('unlike pin session timeout', 400)
+
+@pin.route('/pin/<pin_id>/likes', defaults={'page_num':1})
+@pin.route('/pin/<pin_id>/likes/page/<int:page_num>')
+def pin_likes(pin_id, page_num):
+    if g.user_id:
+        limit = 5 
+        offset = (page_num - 1) * limit
+        pin = Pin.objects(id=pin_id).fields(slice__likes=[offset, limit]).first()
+
+        like_list = []
+        for like in pin.likes:
+            like_item = {}
+            like_item['user_id'] = str(like.id)
+            like_item['avatar'] = like.avatar
+            like_list.append(like_item)
+        res_data = {
+            'total':len(like_list),
+            'items':like_list,
+        }
+        return (json.dumps(res_data), 200)
+    return ('likes list session timeout', 400)
+
+
 @pin.route('/web/pin')
 def web_pin():
     if g.user_id:
