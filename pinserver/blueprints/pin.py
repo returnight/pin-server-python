@@ -59,7 +59,7 @@ def pins_isliked_pack(pins, user):
         pin_item['isliked'] = 0
         if user in pin.likes:
             pin_item['isliked'] = 1
-
+            
         pin_item['pin_id'] = str(pin.id)
         pin_item['type'] = pin.type
         pin_item['content'] = pin.content
