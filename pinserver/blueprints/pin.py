@@ -40,6 +40,7 @@ def pins_pack(pins):
         pin_item = {}
         pin_item['pin_id'] = str(pin.id)
         pin_item['content'] = pin.content
+        pin_item['pic'] = pin.pic
         pin_item['avatar'] = pin.avatar
         pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
         pin_list.append(pin_item)
@@ -53,8 +54,11 @@ def pins_pack(pins):
 def pin_post():
     if g.user_id:
         content = request.form['content']
+        pic = request.form['pic']
+
         owner = User.objects(id=g.user_id).first()
         pin = Pin(content=content,
+                  pic=pic,
                   owner=owner,
                   create_at=datetime.utcnow(),
                   avatar=owner.avatar)

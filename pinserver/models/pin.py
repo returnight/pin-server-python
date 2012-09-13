@@ -34,6 +34,8 @@ class Pin(db.Document):
     create_at = db.DateTimeField(required=True)
     avatar = db.StringField()
 
+    pic = db.StringField()
+
     likes_count = db.IntField(default=0)
     likes = db.ListField(db.ReferenceField(User))
 
