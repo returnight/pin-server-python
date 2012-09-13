@@ -11,9 +11,9 @@
 """
 
 from pinserver.extensions import db
-from pinserver.models.user import User
-#from pinserver.models.pin import Pin
 
+from pinserver.models.pin import Pin
+from pinserver.models.user import User
 
 class Comment(db.Document):
     """
