@@ -63,7 +63,7 @@ def comment_pin(pin_id):
                           pin=pin,
                           create_at=datetime.utcnow())
         comment.save()
-        pin.update(push__comments=comment, inc__comments_count=1)
+        pin.update(inc__comments_count=1)
         return ('comment pin success', 200)
     return ('comment pin session timeout', 400)
 
@@ -71,7 +71,7 @@ def comment_pin(pin_id):
 def del_comment(comment_id):
     if g.user_id:
         comment = Comment.objects(id=comment_id).first()
-        comment.pin.update(pull__comments=comment, inc__comments_count=-1)
+        comment.pin.update(inc__comments_count=-1)
         comment.delete()
         return ('del comment success', 200)
     return ('del comment session timeout', 400)

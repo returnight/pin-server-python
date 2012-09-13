@@ -14,7 +14,6 @@ from datetime import datetime
 
 from pinserver.extensions import db
 from pinserver.models.user import User
-#from pinserver.models.comment import Comment
 
 class Pin(db.Document):
     """
@@ -39,7 +38,6 @@ class Pin(db.Document):
     likes = db.ListField(db.ReferenceField(User))
 
     comments_count = db.IntField(default=0)
-    comments = db.ListField(db.ReferenceField(Comment))
     
     # 地理  经，纬 [x, y]
     # loc = db.ListField()
@@ -70,20 +68,3 @@ class Pin(db.Document):
     # 0: 未激活 1: 激活
     status = db.IntField(default=1)
     """
-
-class Comment(db.Document):
-    """
-        Comment
-        ~~~~~~~~
-
-    """
-
-    meta = {
-        'collection':'comments',
-        'ordering':['-create_at'],
-    }
-
-    content = db.StringField()
-    author = db.ReferenceField(User)
-    pin = db.ReferenceField(Pin)
-    create_at = db.DateTimeField()
