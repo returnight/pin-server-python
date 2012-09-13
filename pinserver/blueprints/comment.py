@@ -112,3 +112,19 @@ def comments_mine(user_id, page_num):
         return (json.dumps(res_data), 200)
     return ('comments mine session timeout', 400)
 
+@comment.route('/web/comment')
+def web_comment():
+    if g.user_id:
+        return """
+        <!doctype html>
+        <title>发布评论</title>
+        <h1>发布评论</h1>
+        <h2>pin_id: 505043cabe72c10c4028b605</h2>
+        <form action="/comment/pin/505043cabe72c10c4028b605" method=post>
+          <p><input type=text name=content>
+             <input type=submit value="发布">
+        </form>    
+        """
+    return redirect(url_for('web.web_login'))
+
+

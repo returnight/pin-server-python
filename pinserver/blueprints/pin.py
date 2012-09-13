@@ -192,7 +192,7 @@ def web_pin():
              <input type=submit value="发布">
         </form>    
         """
-    return redirect(url_for('web_login'))
+    return redirect(url_for('web.web_login'))
 
 
 
