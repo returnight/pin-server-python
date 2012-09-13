@@ -177,5 +177,5 @@ def avata_url(email):
 @user.route('/logout')
 def logout():
     session.pop('user_id', None)
-    return redirect(url_for('web_login'))
+    return redirect(url_for('web.web_login'))
 
