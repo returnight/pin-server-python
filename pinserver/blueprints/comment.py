@@ -43,6 +43,7 @@ def comments_pack(comments):
         comment_item['content'] = comment.content
         comment_item['author_id'] = str(comment.author.id)
         comment_item['author_name'] = comment.author.nickname
+        comment_item['avatar'] = comment.author.avatar
         comment_item['create_at'] = comment.create_at.strftime('%Y-%m-%d %H:%M:%S')
         comment_list.append(comment_item)
     res_data = {
