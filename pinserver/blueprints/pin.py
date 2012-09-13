@@ -78,6 +78,7 @@ def pin_post():
         res_data = {
             'pin_id':str(pin.id),
             'content':pin.content,
+            'pic':pin.pic,
             'avatar':pin.avatar,
             'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
