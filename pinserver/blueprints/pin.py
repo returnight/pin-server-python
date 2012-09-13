@@ -56,10 +56,8 @@ def pins_isliked_pack(pins, user):
     for pin in pins:
         pin_item = {}
 
-        isliked = pin.objects(likes__in=[user]).first()
-
         pin_item['isliked'] = 0
-        if isliked:
+        if user in pin.likes:
             pin_item['isliked'] = 1
 
         pin_item['pin_id'] = str(pin.id)
