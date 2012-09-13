@@ -206,9 +206,15 @@ def web_pin():
         <h1>发布Pin</h1>
         <form action="/pin" method=post>
           <p>
+             类型
              <input type=text name=type>
+          <p>
+             文本内容
              <input type=text name=content>
+          <p>
+             图片URL
              <input type=text name=pic>
+          <p>
              <input type=submit value="发布">
         </form>    
         """
