@@ -14,7 +14,7 @@ from datetime import datetime
 
 from pinserver.extensions import db
 from pinserver.models.user import User
-from pinserver.models.comment import Comment
+#from pinserver.models.comment import Comment
 
 class Pin(db.Document):
     """
@@ -71,4 +71,19 @@ class Pin(db.Document):
     status = db.IntField(default=1)
     """
 
+class Comment(db.Document):
+    """
+        Comment
+        ~~~~~~~~
 
+    """
+
+    meta = {
+        'collection':'comments',
+        'ordering':['-create_at'],
+    }
+
+    content = db.StringField()
+    author = db.ReferenceField(User)
+    pin = db.ReferenceField(Pin)
+    create_at = db.DateTimeField()
