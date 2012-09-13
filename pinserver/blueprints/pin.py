@@ -39,6 +39,7 @@ def pins_pack(pins):
     for pin in pins:
         pin_item = {}
         pin_item['pin_id'] = str(pin.id)
+        pin_item['type'] = pin.type
         pin_item['content'] = pin.content
         pin_item['pic'] = pin.pic
         pin_item['avatar'] = pin.avatar
@@ -53,15 +54,22 @@ def pins_pack(pins):
 @pin.route('/pin', methods=['POST'])
 def pin_post():
     if g.user_id:
-        content = request.form['content']
 
+        pin_type = 1
+        if 'type' in request.form:
+            pin_type = request.form['type']
+
+        content = ''
+        if 'content' in request.form:
+            content = request.form['content']
+
+        pic = ''
         if 'pic' in request.form:
             pic = request.form['pic']
-        else:
-            pic = ''
 
         owner = User.objects(id=g.user_id).first()
-        pin = Pin(content=content,
+        pin = Pin(type=pin_type,
+                  content=content,
                   pic=pic,
                   owner=owner,
                   create_at=datetime.utcnow(),
@@ -77,8 +85,8 @@ def pin_post():
 
         res_data = {
             'pin_id':str(pin.id),
+            'type':pin.type,
             'content':pin.content,
-            'pic':pin.pic,
             'avatar':pin.avatar,
             'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
         }

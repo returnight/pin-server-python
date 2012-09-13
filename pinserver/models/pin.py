@@ -28,10 +28,10 @@ class Pin(db.Document):
     }
 
     #type 需要约定
-    type = db.IntField(default=1)
-    content = db.StringField(required=True)
-    owner = db.ReferenceField(User, required=True)
-    create_at = db.DateTimeField(required=True)
+    type = db.IntField()
+    content = db.StringField()
+    owner = db.ReferenceField(User)
+    create_at = db.DateTimeField()
     avatar = db.StringField()
 
     pic = db.StringField()
@@ -40,6 +40,8 @@ class Pin(db.Document):
     likes = db.ListField(db.ReferenceField(User))
 
     comments_count = db.IntField(default=0)
+
+    first_comment = db.StringField()
     
     # 地理  经，纬 [x, y]
     # loc = db.ListField()
