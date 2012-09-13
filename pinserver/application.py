@@ -133,6 +133,6 @@ def legacy(app):
 
     @app.template_filter('user_datetime')
     def user_datetime(datetime):
-        return datetime.strftime('%Y-%m-%d @ %H:%M')
+        return datetime.strftime('%Y-%m-%d @ %H:%M:%S')
     
 
