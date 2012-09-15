@@ -55,11 +55,7 @@ def pins_isliked_pack(pins, user):
     pin_list = []
     for pin in pins:
         pin_item = {}
-
-        pin_item['isliked'] = 0
-        if user in pin.likes:
-            pin_item['isliked'] = 1
-            
+        pin_item['isliked'] = 1 if user in pin.likes else 0
         pin_item['pin_id'] = str(pin.id)
         pin_item['type'] = pin.type
         pin_item['content'] = pin.content
@@ -118,8 +114,7 @@ def pin_post():
         #response.headers['Version'] = '1'
         return response
     else:
-        err_msg = 'session timeout'
-        return jsonify(err_msg=err_msg)
+        return ('pin post session timeout', 400)
 
 @pin.route('/pin/<pin_id>', methods=['GET'])
 def pin_detail(pin_id):
@@ -154,10 +149,10 @@ def del_pin(pin_id):
                 timelines = Timeline.objects(pin=pin_id)
                 for timeline in timelines:
                     timeline.delete()
-                      
-                return jsonify(status='delete success')
-            return jsonify(err_msg='no this pin')
-        return jsonify(err_msg='need pin_id')
+      
+                return ('delete success', 200)
+            return ('no this pin', 400)
+        return ('need pin_id', 400)
     return ('del pin session timeout', 400)
 
 @pin.route('/pins')
@@ -166,8 +161,7 @@ def show_pins():
         user = User.objects(id=g.user_id).first()
         pins = Pin.objects(owner=g.user_id)[:5].order_by('-create_at')
         res_data = pins_isliked_pack(pins, user)
-        response = make_response(json.dumps(res_data))
-        return response
+        return (json.dumps(res_data), 200)
     return ('show_pins session timeout', 400)
 
 @pin.route('/pins/before/<pin_id>')
@@ -176,8 +170,7 @@ def show_pins_before(pin_id):
         time_tag = Pin.objects(id=pin_id).first().create_at
         pins = Pin.objects(Q(create_at__lt=time_tag)&Q(owner=g.user_id))[:5].order_by('-create_at')
         res_data = pins_pack(pins)
-        response = make_response(json.dumps(res_data))
-        return response
+        return (json.dumps(res_data), 200)
     return ('show_pins_before session timeout', 400)
 
 @pin.route('/pins/user/<user_id>')
