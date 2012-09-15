@@ -110,6 +110,7 @@ def pin_post():
             'type':pin.type,
             'content':pin.content,
             'avatar':pin.avatar,
+            'owner_id':str(pin.owner.id)
             'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
         response = make_response(json.dumps(res_data))
@@ -119,6 +120,27 @@ def pin_post():
     else:
         err_msg = 'session timeout'
         return jsonify(err_msg=err_msg)
+
+@pin.route('/pin/<pin_id>', methods=['GET'])
+def pin_detail(pin_id):
+    if g.user_id:
+        pin = Pin.objects(id=pin_id).first()
+
+        user = User.objects(id=g.user_id).first()
+        isliked = 1 if user in pin.likes else 0
+
+        res_data = {
+            'pin_id':str(pin.id),
+            'type':pin.type,
+            'content':pin.content,
+            'pic':pin.pic,
+            'avatar':pin.avatar,
+            'isliked':isliked,
+            'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
+        }
+
+        return (json.dumps(res_data), 200)
+    return ('pin detail timeout', 400)
 
 @pin.route('/del_pin/<pin_id>')
 def del_pin(pin_id):
