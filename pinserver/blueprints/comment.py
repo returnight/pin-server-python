@@ -65,7 +65,16 @@ def comment_pin(pin_id):
                           create_at=datetime.utcnow())
         comment.save()
         pin.update(inc__comments_count=1)
-        return ('comment pin success', 200)
+
+        comment_item = {}
+        comment_item['comment_id'] = str(comment.id)
+        comment_item['content'] = comment.content
+        comment_item['author_id'] = str(comment.author.id)
+        comment_item['author_name'] = comment.author.nickname
+        comment_item['avatar'] = comment.author.avatar
+        comment_item['create_at'] = comment.create_at.strftime('%Y-%m-%d %H:%M:%S')
+
+        return (json.dumps(comment_item), 200)
     return ('comment pin session timeout', 400)
 
 @comment.route('/del_comment/<comment_id>')
