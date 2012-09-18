@@ -120,8 +120,8 @@ def web_comment():
         <!doctype html>
         <title>发布评论</title>
         <h1>发布评论</h1>
-        <h2>pin_id: 505043cabe72c10c4028b605</h2>
-        <form action="/comment/pin/505043cabe72c10c4028b605" method=post>
+        <h2>pin_id: 5051ee3fbe72c11c4e3accc9</h2>
+        <form action="/comment/pin/5051ee3fbe72c11c4e3accc9" method=post>
           <p><input type=text name=content>
              <input type=submit value="发布">
         </form>    
