@@ -106,7 +106,7 @@ def pin_post():
             'type':pin.type,
             'content':pin.content,
             'avatar':pin.avatar,
-            'owner_id':str(pin.owner.id)
+            'owner_id':str(pin.owner.id),
             'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
         response = make_response(json.dumps(res_data))
@@ -122,7 +122,7 @@ def pin_detail(pin_id):
         pin = Pin.objects(id=pin_id).first()
 
         user = User.objects(id=g.user_id).first()
-        isliked = 1 #if user in pin.likes else 0
+        isliked = 1 if user in pin.likes else 0
 
         res_data = {
             'pin_id':str(pin.id),
