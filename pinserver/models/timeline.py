@@ -12,7 +12,7 @@
 
 from datetime import datetime
 
-from pinserver import db
+from pinserver.extensions import db
 
 from pinserver.models.user import User
 from pinserver.models.pin import Pin

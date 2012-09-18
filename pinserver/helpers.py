@@ -10,6 +10,8 @@
 
 """
 
+import time
+
 from flask import g
 from flask import session
 
@@ -22,3 +24,8 @@ def before_request():
     if 'user_id' in session:
         g.user_id = session['user_id']
         
+def timestamp(date_time):
+    """
+    从datetime获取时间戳
+    """
+    return int(time.mktime(date_time.timetuple()))

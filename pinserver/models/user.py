@@ -12,7 +12,7 @@
 
 from datetime import datetime
 
-from pinserver import db
+from pinserver.extensions import db
 
 # models
 class User(db.Document):
@@ -30,6 +30,16 @@ class User(db.Document):
     register_at = db.DateTimeField(default=datetime.utcnow(), required=True)
     avatar = db.StringField(default='',max_length=256)
     
+    pins_count = db.IntField(default=0)
+
+    followers = db.ListField(db.ReferenceField('self'))
+    followers_count = db.IntField(default=0)
+
+    fans = db.ListField(db.ReferenceField('self'))
+    fans_count = db.IntField(default=0)
+
+    favs_count = db.IntField(default=0)
+
     """
     username = db.StringField(max_length=32, unique=True)
     

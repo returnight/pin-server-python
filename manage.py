@@ -13,7 +13,10 @@ import pymongo
 
 from flask.ext.script import Manager, Server
 
-from pinserver import app
+from pinserver import create_app
+
+
+app = create_app()
 
 manager = Manager(app)
 

@@ -12,8 +12,7 @@
 
 from datetime import datetime
 
-from pinserver import db
-
+from pinserver.extensions import db
 from pinserver.models.user import User
 
 class Pin(db.Document):
@@ -29,11 +28,23 @@ class Pin(db.Document):
     }
 
     #type 需要约定
-    type = db.IntField(default=1)
-    content = db.StringField(required=True)
-    owner = db.ReferenceField(User, required=True)
-    create_at = db.DateTimeField(required=True)
+    type = db.IntField()
+    content = db.StringField()
+    owner = db.ReferenceField(User)
+    create_at = db.DateTimeField()
     avatar = db.StringField()
+
+    pic = db.StringField()
+
+    likes_count = db.IntField(default=0)
+    likes = db.ListField(db.ReferenceField(User))
+
+    comments_count = db.IntField(default=0)
+
+    first_comment = db.StringField()
+    
+    # 地理  经，纬 [x, y]
+    # loc = db.ListField()
     
     """
     username = db.StringField(max_length=32, unique=True)
@@ -61,5 +72,3 @@ class Pin(db.Document):
     # 0: 未激活 1: 激活
     status = db.IntField(default=1)
     """
-
-
