@@ -64,6 +64,18 @@ def comment_pin(pin_id):
                           pin=pin,
                           create_at=datetime.utcnow())
         comment.save()
+        
+        if pin.comments_count == 0:
+            pin.first_comment = content
+            pin.first_comment_user = user
+            pin.first_comment_create_at = datetime.utcnow()
+            pin.save()
+        elif pin.comments_count >= 1:
+            pin.last_comment = content
+            pin.last_comment_user = user
+            pin.last_comment_create_at = datetime.utcnow()
+            pin.save()
+
         pin.update(inc__comments_count=1)
 
         comment_item = {}

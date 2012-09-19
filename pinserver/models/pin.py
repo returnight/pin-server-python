@@ -42,7 +42,13 @@ class Pin(db.Document):
     comments_count = db.IntField(default=0)
 
     first_comment = db.StringField()
-    
+    first_comment_user = db.ReferenceField(User)
+    first_comment_create_at = db.DateTimeField()
+
+    last_comment = db.StringField()
+    last_comment_user = db.ReferenceField(User)
+    last_comment_create_at = db.DateTimeField()
+
     # 地理  经，纬 [x, y]
     # loc = db.ListField()
     

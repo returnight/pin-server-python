@@ -28,13 +28,14 @@ from pinserver.helpers import before_request
 from pinserver.models.user import User
 from pinserver.models.pin import Pin
 from pinserver.models.timeline import Timeline
+from pinserver.models.comment import Comment
 
 pin = Blueprint('pin', __name__)
 
 pin.before_request(before_request)
 
 #support functions
-def pins_pack(pins):
+def pins_pack(pins, user):
     pin_list = []
     for pin in pins:
         pin_item = {}
@@ -43,6 +44,33 @@ def pins_pack(pins):
         pin_item['content'] = pin.content
         pin_item['pic'] = pin.pic
         pin_item['avatar'] = pin.avatar
+        pin_item['comments_count'] = pin.comments_count
+        pin_item['isliked'] = 1 if user in pin.likes else 0
+
+        if pin.comments_count == 0:
+            pin_item['comments'] = []
+        elif pin.comments_count == 1:
+            first_comment = {
+                'content':pin.first_comment,
+                'avatar':pin.first_comment_user.avatar,
+                'create_at':pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            pin_item['comments'] = [first_comment]
+        elif pin.comments_count >= 2:
+           first_comment = {
+                'content':pin.first_comment,
+                'avatar':pin.first_comment_user.avatar,
+                'create_at':pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            last_comment = {
+                'content':pin.last_comment,
+                'avatar':pin.last_comment_user.avatar,
+                'create_at':pin.last_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            pin_item['comments'] = [first_comment, last_comment]
+
+
+        pin_item['likes_count'] = pin.likes_count
         pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
         pin_list.append(pin_item)
     res_data = {
@@ -51,23 +79,24 @@ def pins_pack(pins):
     }
     return res_data
 
-def pins_isliked_pack(pins, user):
-    pin_list = []
-    for pin in pins:
-        pin_item = {}
-        pin_item['isliked'] = 1 if user in pin.likes else 0
-        pin_item['pin_id'] = str(pin.id)
-        pin_item['type'] = pin.type
-        pin_item['content'] = pin.content
-        pin_item['pic'] = pin.pic
-        pin_item['avatar'] = pin.avatar
-        pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
-        pin_list.append(pin_item)
-    res_data = {
-        'total':len(pin_list),
-        'items':pin_list,
-    }
-    return res_data
+# droped
+# def pins_isliked_pack(pins, user):
+#     pin_list = []
+#     for pin in pins:
+#         pin_item = {}
+#         pin_item['isliked'] = 1 if user in pin.likes else 0
+#         pin_item['pin_id'] = str(pin.id)
+#         pin_item['type'] = pin.type
+#         pin_item['content'] = pin.content
+#         pin_item['pic'] = pin.pic
+#         pin_item['avatar'] = pin.avatar
+#         pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
+#         pin_list.append(pin_item)
+#     res_data = {
+#         'total':len(pin_list),
+#         'items':pin_list,
+#     }
+#     return res_data
 
 @pin.route('/pin', methods=['POST'])
 def pin_post():
@@ -160,7 +189,7 @@ def show_pins():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         pins = Pin.objects(owner=g.user_id)[:5].order_by('-create_at')
-        res_data = pins_isliked_pack(pins, user)
+        res_data = pins_pack(pins, user)
         return (json.dumps(res_data), 200)
     return ('show_pins session timeout', 400)
 
@@ -168,16 +197,18 @@ def show_pins():
 def show_pins_before(pin_id):
     if g.user_id:
         time_tag = Pin.objects(id=pin_id).first().create_at
+        user = User.objects(id=g.user_id).first()
         pins = Pin.objects(Q(create_at__lt=time_tag)&Q(owner=g.user_id))[:5].order_by('-create_at')
-        res_data = pins_pack(pins)
+        res_data = pins_pack(pins, user)
         return (json.dumps(res_data), 200)
     return ('show_pins_before session timeout', 400)
 
 @pin.route('/pins/user/<user_id>')
 def show_pins_user(user_id):
     if g.user_id:
+        user = User.objects(id=g.user_id).first()
         pins = Pin.objects(owner=user_id)[:5].order_by('-create_at')
-        res_data = pins_pack(pins)
+        res_data = pins_pack(pins, user)
         response = make_response(json.dumps(res_data))
         return response
     return ('show_pins session timeout', 400)
@@ -186,8 +217,9 @@ def show_pins_user(user_id):
 def show_pins_user_before(user_id, pin_id):
     if g.user_id:
         time_tag = Pin.objects(id=pin_id).first().create_at
+        user = User.objects(id=g.user_id).first()
         pins = Pin.objects(Q(create_at__lt=time_tag)&Q(owner=user_id))[:5].order_by('-create_at')
-        res_data = pins_pack(pins)
+        res_data = pins_pack(pins, user)
         response = make_response(json.dumps(res_data))
         return response
     return ('show_pins_before session timeout', 400)
