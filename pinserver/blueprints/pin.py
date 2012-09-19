@@ -57,7 +57,7 @@ def pins_pack(pins, user):
             }
             pin_item['comments'] = [first_comment]
         elif pin.comments_count >= 2:
-           first_comment = {
+            first_comment = {
                 'content':pin.first_comment,
                 'avatar':pin.first_comment_user.avatar,
                 'create_at':pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
