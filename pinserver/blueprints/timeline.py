@@ -43,6 +43,31 @@ def timeline_pack(timelines, user):
         timeline_item['content'] = timeline.pin.content
         timeline_item['avatar'] = timeline.pin.avatar
         timeline_item['create_at'] = timeline.create_at.strftime('%Y-%m-%d %H:%M:%S')
+        timeline_item['likes_count'] = timeline.pin.likes_count
+        timeline_item['comments_count'] = timeline.pin.comments_count
+
+        if timeline.pin.comments_count == 0:
+            timeline_item['comments'] = []
+        elif timeline.pin.comments_count == 1:
+            first_comment = {
+                'content':timeline.pin.first_comment,
+                'avatar':timeline.pin.first_comment_user.avatar,
+                'create_at':timeline.pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            timeline_item['comments'] = [first_comment]
+        elif timeline.pin.comments_count >= 2:
+            first_comment = {
+                'content':timeline.pin.first_comment,
+                'avatar':timeline.pin.first_comment_user.avatar,
+                'create_at':timeline.pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            last_comment = {
+                'content':timeline.pin.last_comment,
+                'avatar':timeline.pin.last_comment_user.avatar,
+                'create_at':timeline.pin.last_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            timeline_item['comments'] = [first_comment, last_comment]
+
         timeline_list.append(timeline_item)
     res_data = {
         'total':len(timeline_list),
