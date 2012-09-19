@@ -23,16 +23,18 @@ from flask.views import MethodView
 
 from pinserver.helpers import before_request
 from pinserver.models.timeline import Timeline
+from pinserver.models.user import User
 
 timeline = Blueprint('timeline', __name__)
 
 timeline.before_request(before_request)
 
 #support functions
-def timeline_pack(timelines):
+def timeline_pack(timelines, user):
     timeline_list = []
     for timeline in timelines:
         timeline_item = {}
+        timeline_item['isliked'] = 1 if user in timeline.pin.likes else 0
         timeline_item['tl_id'] = str(timeline.id)
         timeline_item['pic'] = timeline.pin.pic
         timeline_item['type'] = timeline.pin.type
@@ -51,8 +53,9 @@ def timeline_pack(timelines):
 @timeline.route('/timeline')
 def show_timeline():
     if g.user_id:
+        user = User.objects(id=g.user_id).first()
         timelines = Timeline.objects(owner=g.user_id)[:5].order_by('-create_at')
-        res_data = timeline_pack(timelines)
+        res_data = timeline_pack(timelines, user)
         return (json.dumps(res_data), 200)
     return ('timeline session timeout', 400)
 
@@ -60,8 +63,9 @@ def show_timeline():
 def show_timeline_before(timeline_id):
     if g.user_id:
         time_tag = Timeline.objects(id=timeline_id).first().create_at
+        user = User.objects(id=g.user_id).first()
         timelines = Timeline.objects(Q(create_at__lt=time_tag)&Q(owner=g.user_id))[:5].order_by('-create_at')
-        res_data = timeline_pack(timelines)
+        res_data = timeline_pack(timelines, user)
         return (json.dumps(res_data), 200)
     return ('timeline_before session timeout', 400)
 
