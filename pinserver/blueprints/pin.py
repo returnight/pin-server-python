@@ -52,6 +52,8 @@ def pins_pack(pins, user):
         elif pin.comments_count == 1:
             first_comment = {
                 'content':pin.first_comment,
+                'author_id':pin.first_comment_user.id,
+                'nickname':pin.first_comment_user.nickname,
                 'avatar':pin.first_comment_user.avatar,
                 'create_at':pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
             }
@@ -59,11 +61,15 @@ def pins_pack(pins, user):
         elif pin.comments_count >= 2:
             first_comment = {
                 'content':pin.first_comment,
+                'author_id':pin.first_comment_user.id,
+                'nickname':pin.first_comment_user.nickname,
                 'avatar':pin.first_comment_user.avatar,
                 'create_at':pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
             }
             last_comment = {
                 'content':pin.last_comment,
+                'author_id':pin.last_comment_user.id,
+                'nickname':pin.last_comment_user.nickname,
                 'avatar':pin.last_comment_user.avatar,
                 'create_at':pin.last_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
             }
