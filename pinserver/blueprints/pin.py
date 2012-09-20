@@ -265,6 +265,7 @@ def pin_likes(pin_id, page_num):
             like_item = {}
             like_item['user_id'] = str(like.id)
             like_item['avatar'] = like.avatar
+            like_item['nickname'] = like.nickname
             like_list.append(like_item)
         res_data = {
             'total':len(like_list),
