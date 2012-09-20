@@ -252,8 +252,8 @@ def unlike_pin(pin_id):
         return ('unlike success', 200)
     return ('unlike pin session timeout', 400)
 
-@pin.route('/pin/<pin_id>/likes', defaults={'page_num':1})
-@pin.route('/pin/<pin_id>/likes/page/<int:page_num>')
+@pin.route('/likes/pin/<pin_id>', defaults={'page_num':1})
+@pin.route('/likes/pin/<pin_id>/page/<int:page_num>')
 def pin_likes(pin_id, page_num):
     if g.user_id:
         limit = 5 
