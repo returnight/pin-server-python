@@ -135,6 +135,13 @@ def pin_post():
                             create_at=datetime.utcnow())
         timeline.save()
 
+        if owner.fans:
+            for fan in owner.fans:
+                fan_timeline = Timeline(pin=pin,
+                                        owner=fan,
+                                        create_at=datetime.utcnow())
+                fan_timeline.save()
+
         owner.update(inc__pins_count=1)
 
         res_data = {
