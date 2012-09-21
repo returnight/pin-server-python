@@ -167,17 +167,49 @@ def pin_detail(pin_id):
         user = User.objects(id=g.user_id).first()
         isliked = 1 if user in pin.likes else 0
 
-        res_data = {
-            'pin_id':str(pin.id),
-            'type':pin.type,
-            'content':pin.content,
-            'pic':pin.pic,
-            'avatar':pin.avatar,
-            'isliked':isliked,
-            'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
-        }
+        pin_item = {}
+        pin_item['pin_id'] = str(pin.id)
+        pin_item['type'] = pin.type
+        pin_item['content'] = pin.content
+        pin_item['pic'] = pin.pic
+        pin_item['avatar'] = pin.avatar
+        pin_item['comments_count'] = pin.comments_count
+        pin_item['isliked'] = 1 if user in pin.likes else 0
 
-        return (json.dumps(res_data), 200)
+        if pin.comments_count == 0:
+            pin_item['comments'] = []
+        elif pin.comments_count == 1:
+            first_comment = {
+                'content':pin.first_comment,
+                'author_id':str(pin.first_comment_user.id),
+                'nickname':pin.first_comment_user.nickname,
+                'avatar':pin.first_comment_user.avatar,
+                'create_at':pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            pin_item['comments'] = [first_comment]
+        elif pin.comments_count >= 2:
+            first_comment = {
+                'content':pin.first_comment,
+                'author_id':str(pin.first_comment_user.id),
+                'nickname':pin.first_comment_user.nickname,
+                'avatar':pin.first_comment_user.avatar,
+                'create_at':pin.first_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            last_comment = {
+                'content':pin.last_comment,
+                'author_id':str(pin.last_comment_user.id),
+                'nickname':pin.last_comment_user.nickname,
+                'avatar':pin.last_comment_user.avatar,
+                'create_at':pin.last_comment_create_at.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            pin_item['comments'] = [first_comment, last_comment]
+
+
+        pin_item['likes_count'] = pin.likes_count
+        pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
+
+
+        return (json.dumps(pin_item), 200)
     return ('pin detail timeout', 400)
 
 @pin.route('/del_pin/<pin_id>')
