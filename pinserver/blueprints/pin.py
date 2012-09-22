@@ -45,6 +45,9 @@ def pins_pack(pins, user):
         pin_item['content'] = pin.content
         pin_item['pic'] = pin.pic
         pin_item['avatar'] = pin.avatar
+        pin_item['price'] = pin.price
+        pin_item['currency'] = pin.currency
+        pin_item['stamp'] = pin.stamp
         pin_item['comments_count'] = pin.comments_count
         pin_item['isliked'] = 1 if user in pin.likes else 0
 
@@ -149,6 +152,10 @@ def pin_post():
             'type':pin.type,
             'content':pin.content,
             'avatar':pin.avatar,
+            'pic':pin.pic,
+            'stamp':pin.stamp,
+            'currency':pin.currency,
+            'price':pin.price,
             'owner_id':str(pin.owner.id),
             'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
@@ -173,6 +180,9 @@ def pin_detail(pin_id):
         pin_item['content'] = pin.content
         pin_item['pic'] = pin.pic
         pin_item['avatar'] = pin.avatar
+        pin_item['price'] = pin.price
+        pin_item['currency'] = pin.currency
+        pin_item['stamp'] = pin.stamp
         pin_item['comments_count'] = pin.comments_count
         pin_item['isliked'] = 1 if user in pin.likes else 0
 
