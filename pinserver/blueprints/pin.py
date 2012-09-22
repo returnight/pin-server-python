@@ -109,22 +109,22 @@ def pins_pack(pins, user):
 def pin_post():
     if g.user_id:
 
-        pin_type = 1
-        if 'type' in request.form:
-            pin_type = int(request.form['type'])
+        pin_type = request.form['type'] if ('type' in request.form) and request.form['type'] else 1
+        content = request.form['content'] if 'content' in request.form else ''
+        pic = request.form['pic'] if 'pic' in request.form else ''
+        stamp = request.form['stamp'] if ('stamp' in request.form) and request.form['stamp'] else 1
+        price = request.form['price'] if 'price' in request.form else 1.0
+        currency = request.form['currency'] if ('currency' in request.form) and request.form['currency'] else 'CNY'
 
-        content = ''
-        if 'content' in request.form:
-            content = request.form['content']
-
-        pic = ''
-        if 'pic' in request.form:
-            pic = request.form['pic']
+        # ex_rate = request.form['ex_rate'] if 'ex_rate' in request.form else 1.0
 
         owner = User.objects(id=g.user_id).first()
         pin = Pin(type=pin_type,
                   content=content,
                   pic=pic,
+                  stamp=stamp,
+                  price=price,
+                  currency=currency,
                   owner=owner,
                   create_at=datetime.utcnow(),
                   avatar=owner.avatar)
@@ -328,6 +328,15 @@ def web_pin():
           <p>
              文本内容
              <input type=text name=content>
+          <p>
+             价格
+             <input type=text name=price>
+          <p>
+             货币类型（留空为人民币‘CNY’）
+             <input type=text name=currency>
+          <p>
+             徽章（整型，留空为1）
+             <input type=text name=stamp>
           <p>
              图片URL
              <input type=text name=pic>
