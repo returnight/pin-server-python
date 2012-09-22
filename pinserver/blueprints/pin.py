@@ -113,7 +113,7 @@ def pin_post():
         content = request.form['content'] if 'content' in request.form else ''
         pic = request.form['pic'] if 'pic' in request.form else ''
         stamp = request.form['stamp'] if ('stamp' in request.form) and request.form['stamp'] else 1
-        price = request.form['price'] if 'price' in request.form else 1.0
+        price = float(request.form['price']) if 'price' in request.form else 1.0
         currency = request.form['currency'] if ('currency' in request.form) and request.form['currency'] else 'CNY'
 
         # ex_rate = request.form['ex_rate'] if 'ex_rate' in request.form else 1.0
