@@ -64,8 +64,29 @@ def comment_pin(pin_id):
                           pin=pin,
                           create_at=datetime.utcnow())
         comment.save()
+        
+        if pin.comments_count == 0:
+            pin.first_comment = content
+            pin.first_comment_user = user
+            pin.first_comment_create_at = datetime.utcnow()
+            pin.save()
+        elif pin.comments_count >= 1:
+            pin.last_comment = content
+            pin.last_comment_user = user
+            pin.last_comment_create_at = datetime.utcnow()
+            pin.save()
+
         pin.update(inc__comments_count=1)
-        return ('comment pin success', 200)
+
+        comment_item = {}
+        comment_item['comment_id'] = str(comment.id)
+        comment_item['content'] = comment.content
+        comment_item['author_id'] = str(comment.author.id)
+        comment_item['author_name'] = comment.author.nickname
+        comment_item['avatar'] = comment.author.avatar
+        comment_item['create_at'] = comment.create_at.strftime('%Y-%m-%d %H:%M:%S')
+
+        return (json.dumps(comment_item), 200)
     return ('comment pin session timeout', 400)
 
 @comment.route('/del_comment/<comment_id>')
@@ -120,8 +141,8 @@ def web_comment():
         <!doctype html>
         <title>发布评论</title>
         <h1>发布评论</h1>
-        <h2>pin_id: 5051ee3fbe72c11c4e3accc9</h2>
-        <form action="/comment/pin/5051ee3fbe72c11c4e3accc9" method=post>
+        <h2>pin_id: 505951cdbe72c1409bc41cd3</h2>
+        <form action="/comment/pin/505951cdbe72c1409bc41cd3" method=post>
           <p><input type=text name=content>
              <input type=submit value="发布">
         </form>    

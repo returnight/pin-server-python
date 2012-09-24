@@ -36,13 +36,26 @@ class Pin(db.Document):
 
     pic = db.StringField()
 
+    stamp = db.IntField()
+
+    price = db.FloatField()
+    currency = db.StringField()
+
+    ex_rate = db.FloatField(default=1.0)
+
     likes_count = db.IntField(default=0)
     likes = db.ListField(db.ReferenceField(User))
 
     comments_count = db.IntField(default=0)
 
     first_comment = db.StringField()
-    
+    first_comment_user = db.ReferenceField(User)
+    first_comment_create_at = db.DateTimeField()
+
+    last_comment = db.StringField()
+    last_comment_user = db.ReferenceField(User)
+    last_comment_create_at = db.DateTimeField()
+
     # 地理  经，纬 [x, y]
     # loc = db.ListField()
     
