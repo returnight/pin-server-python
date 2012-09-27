@@ -112,3 +112,27 @@ def relation_fans(page_num):
         res_data = fans_pack(fans)
         return (json.dumps(res_data), 200)
     return ('fans list session timeout', 400)
+
+@relation.route('/relation/user/<user_id>/followers', defaults={'page_num':1})
+@relation.route('/relation/user/<user_id>/followers/page/<int:page_num>')
+def relation_followers(user_id, page_num):
+    if g.user_id:
+        limit = 5 
+        offset = (page_num - 1) * limit
+        user = User.objects(id=user_id).fields(slice__followers=[offset, limit]).first()
+        followers = user.followers
+        res_data = followers_pack(followers)
+        return (json.dumps(res_data), 200)
+    return ('followers list session timeout', 400)
+
+@relation.route('/relation/user/<user_id>/fans', defaults={'page_num':1})
+@relation.route('/relation/user/<user_id>/fans/page/<int:page_num>')
+def relation_fans(user_id, page_num):
+    if g.user_id:
+        limit = 5 
+        offset = (page_num - 1) * limit
+        user = User.objects(id=user_id).fields(slice__fans=[offset, limit]).first()
+        fans = user.fans
+        res_data = fans_pack(fans)
+        return (json.dumps(res_data), 200)
+    return ('fans list session timeout', 400)
