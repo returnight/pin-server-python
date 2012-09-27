@@ -116,6 +116,7 @@ def user_info(user_id):
     if g.user_id:
         if not user_id:
             user_id = g.user_id
+
         user = User.objects(id=user_id).first()
         user_id = str(user.id)
         user_data = {
@@ -127,6 +128,11 @@ def user_info(user_id):
                     'followers_count':user.followers_count,
                     'fans_count':user.fans_count,
                     }
+
+        if user_id != g.user_id:
+            I = User.objects(id=g.user_id).first()
+            user_data['isfollowed'] = 1 if user in I.followers else 0
+
         response = make_response(json.dumps(user_data))
         #response.headers
         response.headers['Version'] = '1'
