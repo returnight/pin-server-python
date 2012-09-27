@@ -34,18 +34,6 @@ user = Blueprint('user', __name__)
 
 user.before_request(before_request)
 
-# support functions
-def user_response(user):
-    user_data = {
-                'user_id':str(user.id),
-                'email':user.email,
-                'nickname':user.nickname,
-                'avatar':user.avatar,
-                }
-    response = make_response(json.dumps(user_data), 200)
-    response.headers['Version'] = '1'
-    return response
-
 @user.route('/reg', methods=['POST'])
 def reg_user_post():
     """
@@ -108,7 +96,17 @@ def login_post():
         
         # 此参数当写入session时配置
         session.permanent = True
-        return user_response(user)
+
+        user_data = {
+                'user_id':str(user.id),
+                'email':user.email,
+                'nickname':user.nickname,
+                'avatar':user.avatar,
+                'pins_count':user.pins_count,
+                'followers_count':user.followers_count,
+                'fans_count':user.fans_count,
+                }
+        return (json.dumps(user_data), 200)
     else:
         return ('email or password error', 401)
 
