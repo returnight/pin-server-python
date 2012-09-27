@@ -86,6 +86,8 @@ def relation_unfollow(user_id):
     if g.user_id:
         follower = User.objects(id=user_id).first()
         user = User.objects(id=g.user_id).first()
+        #TODO
+        # user.update(***)
         User.objects(id=g.user_id).update_one(pull__followers=follower, inc__followers_count=-1)
         User.objects(id=user_id).update_one(pull__fans=user, inc__fans_count=-1)
         return ('unfollow success', 200)
