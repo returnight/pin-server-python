@@ -98,28 +98,34 @@ def login_post():
         session.permanent = True
 
         user_data = {
-                'user_id':str(user.id),
-                'email':user.email,
-                'nickname':user.nickname,
-                'avatar':user.avatar,
-                'pins_count':user.pins_count,
-                'followers_count':user.followers_count,
-                'fans_count':user.fans_count,
-                }
+                    'user_id':str(user.id),
+                    'email':user.email,
+                    'nickname':user.nickname,
+                    'avatar':user.avatar,
+                    'pins_count':user.pins_count,
+                    'followers_count':user.followers_count,
+                    'fans_count':user.fans_count,
+                    }
         return (json.dumps(user_data), 200)
     else:
         return ('email or password error', 401)
 
-@user.route('/user', methods=['GET'])
-def user_info():
+@user.route('/user', methods=['GET'], defaults={'user_id':''})
+@user.route('/user/<user_id>', methods=['GET'])
+def user_info(user_id):
     if g.user_id:
-        user = User.objects(id=g.user_id).first()
+        if not user_id:
+            user_id = g.user_id
+        user = User.objects(id=user_id).first()
         user_id = str(user.id)
         user_data = {
-                     'user_id':user_id,
-                     'email':user.email,
-                     'nickname':user.nickname,
-                     'avatar':user.avatar,
+                    'user_id':str(user.id),
+                    'email':user.email,
+                    'nickname':user.nickname,
+                    'avatar':user.avatar,
+                    'pins_count':user.pins_count,
+                    'followers_count':user.followers_count,
+                    'fans_count':user.fans_count,
                     }
         response = make_response(json.dumps(user_data))
         #response.headers
@@ -143,10 +149,13 @@ def user_info_post():
         
         user_id = str(user.id)
         user_data = {
-                     'user_id':user_id,
-                     'email':user.email,
-                     'nickname':user.nickname,
-                     'avatar':user.avatar,
+                    'user_id':str(user.id),
+                    'email':user.email,
+                    'nickname':user.nickname,
+                    'avatar':user.avatar,
+                    'pins_count':user.pins_count,
+                    'followers_count':user.followers_count,
+                    'fans_count':user.fans_count,
                     }
         response = make_response(json.dumps(user_data))
         #response.headers
