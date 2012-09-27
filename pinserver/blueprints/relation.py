@@ -34,13 +34,14 @@ relation = Blueprint('relation', __name__)
 relation.before_request(before_request)
 
 #support functions
-def followers_pack(followers):
+def followers_pack(followers, user):
     follower_list = []
     for follower in followers:
         follower_item = {}
         follower_item['user_id'] = str(follower.id)
         follower_item['nickname'] = follower.nickname
         follower_item['avatar'] = follower.avatar
+        follower_item['isfollowed'] = 1 if user in follower.fans else 0
         follower_list.append(follower_item)
     res_data = {
         'total':len(follower_list),
@@ -48,13 +49,14 @@ def followers_pack(followers):
     }
     return res_data
 
-def fans_pack(fans):
+def fans_pack(fans, user):
     fan_list = []
     for fan in fans:
         fan_item = {}
         fan_item['user_id'] = str(fan.id)
         fan_item['nickname'] = fan.nickname
         fan_item['avatar'] = fan.avatar
+        fan_item['isfollowed'] = 1 if user in fan.fans else 0
         fan_list.append(fan_item)
     res_data = {
         'total':len(fan_list),
@@ -97,7 +99,7 @@ def relation_followers(page_num):
         offset = (page_num - 1) * limit
         user = User.objects(id=g.user_id).fields(slice__followers=[offset, limit]).first()
         followers = user.followers
-        res_data = followers_pack(followers)
+        res_data = followers_pack(followers, user)
         return (json.dumps(res_data), 200)
     return ('followers list session timeout', 400)
 
@@ -109,7 +111,7 @@ def relation_fans(page_num):
         offset = (page_num - 1) * limit
         user = User.objects(id=g.user_id).fields(slice__fans=[offset, limit]).first()
         fans = user.fans
-        res_data = fans_pack(fans)
+        res_data = fans_pack(fans, user)
         return (json.dumps(res_data), 200)
     return ('fans list session timeout', 400)
 
@@ -121,7 +123,7 @@ def relation_user_followers(user_id, page_num):
         offset = (page_num - 1) * limit
         user = User.objects(id=user_id).fields(slice__followers=[offset, limit]).first()
         followers = user.followers
-        res_data = followers_pack(followers)
+        res_data = followers_pack(followers, user)
         return (json.dumps(res_data), 200)
     return ('followers list session timeout', 400)
 
@@ -133,6 +135,6 @@ def relation_user_fans(user_id, page_num):
         offset = (page_num - 1) * limit
         user = User.objects(id=user_id).fields(slice__fans=[offset, limit]).first()
         fans = user.fans
-        res_data = fans_pack(fans)
+        res_data = fans_pack(fans, user)
         return (json.dumps(res_data), 200)
     return ('fans list session timeout', 400)

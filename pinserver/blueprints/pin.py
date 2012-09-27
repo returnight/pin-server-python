@@ -310,10 +310,12 @@ def pin_likes(pin_id, page_num):
         limit = 5 
         offset = (page_num - 1) * limit
         pin = Pin.objects(id=pin_id).fields(slice__likes=[offset, limit]).first()
+        user = User.objects(id=g.user_id).first()
 
         like_list = []
         for like in pin.likes:
             like_item = {}
+            like_item['isfollowed'] = 1 if user in like.fans else 0
             like_item['user_id'] = str(like.id)
             like_item['avatar'] = like.avatar
             like_item['nickname'] = like.nickname
