@@ -115,7 +115,7 @@ def relation_fans(page_num):
 
 @relation.route('/relation/user/<user_id>/followers', defaults={'page_num':1})
 @relation.route('/relation/user/<user_id>/followers/page/<int:page_num>')
-def relation_followers(user_id, page_num):
+def relation_user_followers(user_id, page_num):
     if g.user_id:
         limit = 5 
         offset = (page_num - 1) * limit
@@ -127,7 +127,7 @@ def relation_followers(user_id, page_num):
 
 @relation.route('/relation/user/<user_id>/fans', defaults={'page_num':1})
 @relation.route('/relation/user/<user_id>/fans/page/<int:page_num>')
-def relation_fans(user_id, page_num):
+def relation_user_fans(user_id, page_num):
     if g.user_id:
         limit = 5 
         offset = (page_num - 1) * limit
