@@ -297,8 +297,10 @@ def unlike_pin(pin_id):
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         pin = Pin.objects(id=pin_id).first()
-        pin.update(pull__likes=user, inc__likes_count=-1)
-        return ('unlike success', 200)
+        if user in pin.likes:
+            pin.update(pull__likes=user, inc__likes_count=-1)
+            return ('unlike success', 200)
+        return ('not like this pin', 400)
     return ('unlike pin session timeout', 400)
 
 @pin.route('/likes/pin/<pin_id>', defaults={'page_num':1})
