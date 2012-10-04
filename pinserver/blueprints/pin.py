@@ -297,8 +297,10 @@ def unlike_pin(pin_id):
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         pin = Pin.objects(id=pin_id).first()
-        pin.update(pull__likes=user, inc__likes_count=-1)
-        return ('unlike success', 200)
+        if user in pin.likes:
+            pin.update(pull__likes=user, inc__likes_count=-1)
+            return ('unlike success', 200)
+        return ('not like this pin', 400)
     return ('unlike pin session timeout', 400)
 
 @pin.route('/likes/pin/<pin_id>', defaults={'page_num':1})
@@ -308,10 +310,12 @@ def pin_likes(pin_id, page_num):
         limit = 5 
         offset = (page_num - 1) * limit
         pin = Pin.objects(id=pin_id).fields(slice__likes=[offset, limit]).first()
+        user = User.objects(id=g.user_id).first()
 
         like_list = []
         for like in pin.likes:
             like_item = {}
+            like_item['isfollowed'] = 1 if user in like.fans else 0
             like_item['user_id'] = str(like.id)
             like_item['avatar'] = like.avatar
             like_item['nickname'] = like.nickname
