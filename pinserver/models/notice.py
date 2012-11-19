@@ -27,7 +27,7 @@ class Notice(db.Document):
         'collection':'notices',
         'ordering':['-create_at'],
     }
-    nt_type = db.IntField()
+    type = db.IntField()
     content = db.StringField()
     owner = db.ReferenceField(User)
     create_at = db.DateTimeField()
