@@ -16,6 +16,7 @@ from datetime import datetime
 
 from flask import Blueprint
 from flask import g
+from flask import request
 from flask import redirect
 from flask import url_for
 
