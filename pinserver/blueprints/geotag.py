@@ -77,3 +77,27 @@ def geotags(lat, long):
         res_data = geotags_pack(geotags)
         return (json.dumps(res_data), 200)
     return ('geotags session timeout', 400)
+
+
+@geotag.route('/web/geotag')
+def web_geotag():
+    if g.user_id:
+        return """
+        <!doctype html>
+        <title>发布Geotag</title>
+        <h1>发布Geotag</h1>
+        <form action="/geotag" method=post>
+          <p>
+             标题
+             <input type=text name=title>
+          <p>
+             经度
+             <input type=text name=lat>
+          <p>
+             维度
+             <input type=text name=long>
+          <p>
+             <input type=submit value="发布">
+        </form>    
+        """
+    return redirect(url_for('web.web_login'))
