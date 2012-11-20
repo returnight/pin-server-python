@@ -30,7 +30,7 @@ class Geotag(db.Document):
     meta = {
         'collection':'geotags',
         'ordering':['-create_at'],
-        'indexes': ['*loc.point'],
+        # 'indexes': ['*loc.point'],
     }
 
     title = db.StringField()
