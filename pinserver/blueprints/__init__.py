@@ -16,6 +16,8 @@ from .comment import comment
 from .timeline import timeline
 from .relation import relation
 from .fav import fav
+from .geotag import geotag
 from .upload import upload
 from .admin import admin
 from .web import web
+

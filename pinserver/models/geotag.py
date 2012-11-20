@@ -21,9 +21,9 @@ class Geotag(db.Document):
 
         地理位置标签
 
-        loc:[x, y]
-        x:经度
-        y:维度
+        loc:[lat, long]
+        lat:经度
+        long:维度
 
     """
 
@@ -35,5 +35,5 @@ class Geotag(db.Document):
 
     title = db.StringField()
     owner = db.ReferenceField(User)
-    loc = db.ListField()
+    loc = db.GeoPointField()
     create_at = db.DateTimeField()
