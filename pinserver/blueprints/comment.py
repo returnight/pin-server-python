@@ -3,7 +3,7 @@
     comment.py
     ~~~~~~~~~~~~~
     
-    Pinserver Blueprints comment
+    Pinserver Blueprints Comment
 
     :author: Guo Peng (G_will) <g_will@ieqi.com> 
     :copyright: (c) 2012-2012 by Swipppe

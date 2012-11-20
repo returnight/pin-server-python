@@ -47,13 +47,6 @@ def geotags_pack(geotags):
 def geotag_post():
     if g.user_id:
 
-        # lat = request.form['lat'] if ('lat' in request.form) and request.form['lat'] else 1
-        # long = request.form['long'] if 'long' in request.form else ''
-        # pic = request.form['pic'] if 'pic' in request.form else ''
-        # stamp = request.form['stamp'] if ('stamp' in request.form) and request.form['stamp'] else 1
-        # price = float(request.form['price']) if 'price' in request.form else 1.0
-        # currency = request.form['currency'] if ('currency' in request.form) and request.form['currency'] else 'CNY'
-
         lat = float(request.form['lat']) if 'lat' in request.form else None
         long = float(request.form['long']) if 'long' in request.form else None
         title = request.form['title'] if 'title' in request.form else ''

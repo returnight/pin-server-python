@@ -29,5 +29,6 @@ class Notice(db.Document):
     }
     notice_type = db.IntField()
     content = db.StringField()
+    readed = db.BooleanField()
     owner = db.ReferenceField(User)
     create_at = db.DateTimeField()

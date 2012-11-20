@@ -70,6 +70,7 @@ DEFAULT_BLUEPRINTS = (
     (blueprints.relation, ''),
     (blueprints.fav, ''),
     (blueprints.geotag, ''),
+    (blueprints.notice, ''),
     (blueprints.upload, ''),
     (blueprints.admin, ''),
     (blueprints.web, ''),
