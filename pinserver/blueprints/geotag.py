@@ -61,7 +61,8 @@ def geotag_post():
 
         geotag = Geotag(title=title,
                         owner=owner,
-                        loc=[lat,long])
+                        loc=[lat,long],
+                        create_at=datetime.utcnow())
         geotag.save()
 
         geotag_item = {
