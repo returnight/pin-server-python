@@ -66,7 +66,7 @@ def geotag_post():
 
         geotag_item = {
             'geotag_id':str(geotag.id),
-            'loc':[geotag.lat, geotag.long],
+            'loc':geo.loc,
             'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
             }
 
