@@ -78,7 +78,6 @@ def geotags(lat, long):
         return (json.dumps(res_data), 200)
     return ('geotags session timeout', 400)
 
-
 @geotag.route('/web/geotag')
 def web_geotag():
     if g.user_id:
