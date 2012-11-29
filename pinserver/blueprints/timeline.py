@@ -48,6 +48,8 @@ def timeline_pack(timelines, user):
         timeline_item['create_at'] = timeline.create_at.strftime('%Y-%m-%d %H:%M:%S')
         timeline_item['likes_count'] = timeline.pin.likes_count
         timeline_item['comments_count'] = timeline.pin.comments_count
+        timeline_item['loc'] = timeline.pin.loc
+        timeline_item['geotag'] = timeline.pin.geotag_title
 
         if timeline.pin.comments_count == 0:
             timeline_item['comments'] = []

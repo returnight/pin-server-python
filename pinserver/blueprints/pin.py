@@ -49,6 +49,8 @@ def pins_pack(pins, user):
         pin_item['currency'] = pin.currency
         pin_item['stamp'] = pin.stamp
         pin_item['comments_count'] = pin.comments_count
+        pin_item['loc'] = pin.loc
+        pin_item['geotag'] = pin.geotag_title
         pin_item['isliked'] = 1 if user in pin.likes else 0
 
         if pin.comments_count == 0:
@@ -163,6 +165,8 @@ def pin_post():
             'currency':pin.currency,
             'price':pin.price,
             'owner_id':str(pin.owner.id),
+            'loc':pin.loc,
+            'geotag':pin.geotag_title,
             'create_at':pin.create_at.strftime('%Y-%m-%d %H:%M:%S'),
         }
         response = make_response(json.dumps(res_data))
