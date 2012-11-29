@@ -21,9 +21,9 @@ class Geotag(db.Document):
 
         地理位置标签
 
-        loc:[lat, long]
-        lat:经度
-        long:维度
+        loc:[long, lat]
+        long:经度
+        lat:维度
 
     """
 

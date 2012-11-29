@@ -46,15 +46,15 @@ def geotags_pack(geotags):
 @geotag.route('/geotag', methods=['POST'])
 def geotag_post():
     if g.user_id:
-
-        lat = float(request.form['lat']) if 'lat' in request.form else None
+        
         long = float(request.form['long']) if 'long' in request.form else None
+        lat = float(request.form['lat']) if 'lat' in request.form else None
         title = request.form['title'] if 'title' in request.form else ''
         owner = User.objects(id=g.user_id).first()
 
         geotag = Geotag(title=title,
                         owner=owner,
-                        loc=[lat,long],
+                        loc=[long,lat],
                         create_at=datetime.utcnow())
         geotag.save()
 
@@ -89,10 +89,10 @@ def web_geotag():
              <input type=text name=title>
           <p>
              经度
-             <input type=text name=lat>
+             <input type=text name=long>
           <p>
              维度
-             <input type=text name=long>
+             <input type=text name=lat>
           <p>
              <input type=submit value="发布">
         </form>    

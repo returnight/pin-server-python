@@ -57,7 +57,9 @@ class Pin(db.Document):
     last_comment_create_at = db.DateTimeField()
 
     # 地理  经，纬 [x, y]
-    # loc = db.ListField()
+    loc = db.GeoPointField()
+    geotag_title = db.StringField()
+
     
     """
     username = db.StringField(max_length=32, unique=True)

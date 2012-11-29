@@ -118,6 +118,10 @@ def pin_post():
         stamp = request.form['stamp'] if ('stamp' in request.form) and request.form['stamp'] else 1
         price = float(request.form['price']) if 'price' in request.form else 1.0
         currency = request.form['currency'] if ('currency' in request.form) and request.form['currency'] else 'CNY'
+        long = float(request.form['long']) if 'long' in request.form else None
+        lat = float(request.form['lat']) if 'lat' in request.form else None
+        loc = [long, lat] if long and lat else None
+        geotag_title = request.form['geotag'] if 'geotag' in request.form else None
 
         # ex_rate = request.form['ex_rate'] if 'ex_rate' in request.form else 1.0
 
@@ -130,7 +134,9 @@ def pin_post():
                   currency=currency,
                   owner=owner,
                   create_at=datetime.utcnow(),
-                  avatar=owner.avatar)
+                  avatar=owner.avatar,
+                  loc=loc,
+                  geotag_title=geotag_title)
         pin.save()
 
         timeline = Timeline(pin=pin,
@@ -354,6 +360,15 @@ def web_pin():
           <p>
              图片URL
              <input type=text name=pic>
+          <p>
+             地理标签
+             <input type=text name=geotag>
+          <p>
+             经度
+             <input type=text name=long>
+          <p>
+             维度
+             <input type=text name=lat>
           <p>
              <input type=submit value="发布">
         </form>    
