@@ -69,16 +69,19 @@ def geotag_post():
         return (json.dumps(geotag_item), 200)
     return ('post geotag session timeout', 400)
 
-@geotag.route('/geotags/long/<float:long>/lat/<float:lat>', defaults={'query':None, 'limit':5})
-@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/limit/<int:limit>', defaults={'query':None})
-@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/q/<query>', defaults={'limit':5})
-@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/q/<query>/limit/<int:limit>')
-def geotags(long, lat, query, limit):
+@geotag.route('/geotags/long/<float:long>/lat/<float:lat>', defaults={'query':None, 'page_num':1})
+@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/page/<int:page_num>', defaults={'query':None})
+@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/q/<query>', defaults={'page_num':1})
+@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/q/<query>/page/<int:page_num>')
+def geotags(long, lat, query, page_num):
     if g.user_id:
+        limit = 5
+        start = (page_num - 1) * limit
+        end = page_num * limit
         if query:
-            geotags = Geotag.objects(Q(loc__near=[long, lat]) & Q(title__contains=query))[:limit]
+            geotags = Geotag.objects(Q(loc__within_distance=[(long, lat), 5]) & Q(title__contains=query))[start:end]
         else:    
-            geotags = Geotag.objects(loc__near=[long, lat])[:limit]
+            geotags = Geotag.objects(loc__within_distance=[(long, lat), 5])[start:end]
         res_data = geotags_pack(geotags)
         return (json.dumps(res_data), 200)
     return ('geotags session timeout', 400)
