@@ -13,6 +13,7 @@
 
 import ujson as json
 from datetime import datetime
+from mongoengine import Q
 
 from flask import Blueprint
 from flask import g
@@ -68,10 +69,16 @@ def geotag_post():
         return (json.dumps(geotag_item), 200)
     return ('post geotag session timeout', 400)
 
-@geotag.route('/geotags/lat/<float:lat>/long/<float:long>')
-def geotags(lat, long):
+@geotag.route('/geotags/long/<float:long>/lat/<float:lat>', defaults={'query':None, 'limit':5})
+@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/limit/<int:limit>', defaults={'query':None})
+@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/q/<query>', defaults={'limit':5})
+@geotag.route('/geotags/long/<float:long>/lat/<float:lat>/q/<query>/limit/<int:limit>')
+def geotags(long, lat, query, limit):
     if g.user_id:
-        geotags = Geotag.objects(loc__near=[lat, long])[:5]
+        if query:
+            geotags = Geotag.objects(Q(loc__near=[long, lat]) & Q(title__contains=query))[:limit]
+        else:    
+            geotags = Geotag.objects(loc__near=[long, lat])[:limit]
         res_data = geotags_pack(geotags)
         return (json.dumps(res_data), 200)
     return ('geotags session timeout', 400)
