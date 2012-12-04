@@ -48,6 +48,7 @@ def pins_pack(pins, user):
         pin_item['price'] = pin.price
         pin_item['currency'] = pin.currency
         pin_item['stamp'] = pin.stamp
+        pin_item['owner_desc'] = pin.owner_desc
         pin_item['comments_count'] = pin.comments_count
         pin_item['loc'] = pin.loc
         pin_item['geotag'] = pin.geotag_title
@@ -120,6 +121,7 @@ def pin_post():
         stamp = request.form['stamp'] if ('stamp' in request.form) and request.form['stamp'] else 1
         price = float(request.form['price']) if 'price' in request.form else 1.0
         currency = request.form['currency'] if ('currency' in request.form) and request.form['currency'] else 'CNY'
+        owner_desc = request.form['owner_desc'] if 'owner_desc' in request.form else None
         long = float(request.form['long']) if 'long' in request.form else None
         lat = float(request.form['lat']) if 'lat' in request.form else None
         loc = [long, lat] if long and lat else None
@@ -134,6 +136,7 @@ def pin_post():
                   stamp=stamp,
                   price=price,
                   currency=currency,
+                  owner_desc=owner_desc,
                   owner=owner,
                   create_at=datetime.utcnow(),
                   avatar=owner.avatar,
@@ -164,6 +167,7 @@ def pin_post():
             'stamp':pin.stamp,
             'currency':pin.currency,
             'price':pin.price,
+            'owner_desc':pin.owner_desc,
             'owner_id':str(pin.owner.id),
             'loc':pin.loc,
             'geotag':pin.geotag_title,
@@ -193,6 +197,9 @@ def pin_detail(pin_id):
         pin_item['price'] = pin.price
         pin_item['currency'] = pin.currency
         pin_item['stamp'] = pin.stamp
+        pin_item['owner_desc'] = pin.owner_desc
+        pin_item['loc'] = pin.loc
+        pin_item['geotag'] = pin.geotag_title
         pin_item['comments_count'] = pin.comments_count
         pin_item['isliked'] = 1 if user in pin.likes else 0
 
@@ -361,6 +368,9 @@ def web_pin():
           <p>
              徽章（整型，留空为1）
              <input type=text name=stamp>
+          <p>
+             作者描述（可以留空）
+             <input type=text name=owner_desc>
           <p>
              图片URL
              <input type=text name=pic>

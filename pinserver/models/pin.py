@@ -46,6 +46,8 @@ class Pin(db.Document):
     likes_count = db.IntField(default=0)
     likes = db.ListField(db.ReferenceField(User))
 
+    owner_desc = db.StringField()
+
     comments_count = db.IntField(default=0)
 
     first_comment = db.StringField()
