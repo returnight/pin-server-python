@@ -122,10 +122,10 @@ def pin_post():
         price = float(request.form['price']) if 'price' in request.form else 1.0
         currency = request.form['currency'] if ('currency' in request.form) and request.form['currency'] else 'CNY'
         owner_desc = request.form['owner_desc'] if 'owner_desc' in request.form else None
-        long = float(request.form['long']) if 'long' in request.form else None
-        lat = float(request.form['lat']) if 'lat' in request.form else None
+        long = float(request.form['long']) if 'long' in request.form and request.form['long'] else None
+        lat = float(request.form['lat']) if 'lat' in request.form and request.form['lat'] else None
         loc = [long, lat] if long and lat else None
-        geotag_title = request.form['geotag'] if 'geotag' in request.form else None
+        geotag_title = request.form['geotag'] if 'geotag' in request.form and request.form['geotag'] else None
 
         # ex_rate = request.form['ex_rate'] if 'ex_rate' in request.form else 1.0
 
