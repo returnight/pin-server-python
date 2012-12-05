@@ -45,6 +45,7 @@ def timeline_pack(timelines, user):
         timeline_item['price'] = timeline.pin.price
         timeline_item['currency'] = timeline.pin.currency
         timeline_item['stamp'] = timeline.pin.stamp
+        timeline_item['owner_desc'] = timeline.pin.owner_desc
         timeline_item['create_at'] = timeline.create_at.strftime('%Y-%m-%d %H:%M:%S')
         timeline_item['likes_count'] = timeline.pin.likes_count
         timeline_item['comments_count'] = timeline.pin.comments_count
