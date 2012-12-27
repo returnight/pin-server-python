@@ -42,7 +42,6 @@ def reg_user_post():
 
     """
 
-    err_msg = None
     if not request.form['email']:
         return ('no email', 400)
     if not request.form['nickname']:
@@ -109,6 +108,61 @@ def login_post():
         return (json.dumps(user_data), 200)
     else:
         return ('email or password error', 401)
+
+@user.route('/weibo_reg', methods=['POST'])
+def weibo_reg_post():
+    if 'weibo_id' in request.form and request.form['weibo_id']:
+        weibo_id = request.form['weibo_id']
+        weibo_token = request.form['weibo_token']
+        nickname = request.form['nickname']
+        user = User(weibo_id=weibo_id,
+                weibo_token=weibo_token,
+                nickname=nickname,
+                register_at=datetime.utcnow())
+
+        user.save()
+    
+        user_id = str(user.id)
+        
+        session['user_id'] = user_id
+        session.permanent = True
+        
+        user_data = {
+                    'user_id':user_id,
+                    'nickname':user.nickname,
+                    'weibo_id':user.weibo_id,
+                    'weibo_token':user.weibo_token,
+                    }
+        return (json.dumps(user_data), 200)
+
+    else:
+        return ('weibo_id reg error', 400)
+
+@user.route('/weibo_login', methods=['POST'])
+def weibo_login_post():
+    if 'weibo_id' in request.form and request.form['weibo_id']:
+        weibo_id = request.form['weibo_id']
+        user = User.objects(weibo_id=weibo_id).first()
+
+        if not user:
+            return ('no this weibo user', 400)
+
+        session['user_id'] = str(user.id)
+        session.permanent = True
+
+        user_data = {
+                    'user_id':str(user.id),
+                    'nickname':user.nickname,
+                    'weibo_id':user.weibo_id,
+                    'weibo_token':user.weibo_token,
+                    'avatar':user.avatar,
+                    'pins_count':user.pins_count,
+                    'followers_count':user.followers_count,
+                    'fans_count':user.fans_count,
+                    }
+        return (json.dumps(user_data), 200)
+    else:
+        return ('weibo login error', 400)
 
 @user.route('/user', methods=['GET'], defaults={'user_id':''})
 @user.route('/user/<user_id>', methods=['GET'])
