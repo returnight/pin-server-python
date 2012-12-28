@@ -287,7 +287,7 @@ def show_pins():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         pins = Pin.objects(owner=g.user_id)[:5].order_by('-create_at')
-        res_data = pins_pack(pins)
+        res_data = pins_pack(pins, user)
         return (json.dumps(res_data), 200)
     return ('show_pins session timeout', 400)
 
@@ -295,7 +295,7 @@ def show_pins():
 @pin.route('/explore')
 def show_explore():
     pins = Pin.objects[:20].order_by('-create_at')
-    res_data = explore_pack(pins, user)
+    res_data = explore_pack(pins)
     return (json.dumps(res_data), 200)
 
 @pin.route('/pins/before/<pin_id>')
