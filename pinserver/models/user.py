@@ -24,7 +24,7 @@ class User(db.Document):
     """
     meta = {'collection':'users'}
 
-    email = db.EmailField(unique=True)
+    email = db.EmailField(unique=True, required=False)
     password = db.StringField(max_length=64)
     nickname = db.StringField(max_length=32)
     register_at = db.DateTimeField(default=datetime.utcnow())
