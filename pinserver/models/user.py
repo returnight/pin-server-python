@@ -25,9 +25,9 @@ class User(db.Document):
     meta = {'collection':'users'}
 
     email = db.EmailField(unique=True)
-    password = db.StringField(max_length=64, required=True)
-    nickname = db.StringField(max_length=32, required=True)
-    register_at = db.DateTimeField(default=datetime.utcnow(), required=True)
+    password = db.StringField(max_length=64)
+    nickname = db.StringField(max_length=32)
+    register_at = db.DateTimeField(default=datetime.utcnow())
     avatar = db.StringField(default='',max_length=256)
 
     weibo_id = db.StringField(unique=True)
