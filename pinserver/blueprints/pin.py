@@ -92,6 +92,31 @@ def pins_pack(pins, user):
     }
     return res_data
 
+def explore_pack(pins):
+    pin_list = []
+    for pin in pins:
+        pin_item = {}
+        pin_item['pin_id'] = str(pin.id)
+        pin_item['type'] = pin.type
+        pin_item['content'] = pin.content
+        pin_item['pic'] = pin.pic
+        pin_item['avatar'] = pin.avatar
+        pin_item['price'] = pin.price
+        pin_item['currency'] = pin.currency
+        pin_item['stamp'] = pin.stamp
+        pin_item['owner_desc'] = pin.owner_desc
+        pin_item['comments_count'] = pin.comments_count
+        pin_item['loc'] = pin.loc
+        pin_item['geotag'] = pin.geotag_title
+        pin_item['likes_count'] = pin.likes_count
+        pin_item['create_at'] = pin.create_at.strftime('%Y-%m-%d %H:%M:%S')
+        pin_list.append(pin_item)
+    res_data = {
+        'total':len(pin_list),
+        'items':pin_list,
+    }
+    return res_data
+
 # droped
 # def pins_isliked_pack(pins, user):
 #     pin_list = []
@@ -262,7 +287,7 @@ def show_pins():
     if g.user_id:
         user = User.objects(id=g.user_id).first()
         pins = Pin.objects(owner=g.user_id)[:5].order_by('-create_at')
-        res_data = pins_pack(pins, user)
+        res_data = pins_pack(pins)
         return (json.dumps(res_data), 200)
     return ('show_pins session timeout', 400)
 
@@ -270,7 +295,7 @@ def show_pins():
 @pin.route('/explore')
 def show_explore():
     pins = Pin.objects[:20].order_by('-create_at')
-    res_data = pins_pack(pins, user)
+    res_data = explore_pack(pins, user)
     return (json.dumps(res_data), 200)
 
 @pin.route('/pins/before/<pin_id>')
