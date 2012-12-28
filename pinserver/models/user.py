@@ -30,7 +30,7 @@ class User(db.Document):
     register_at = db.DateTimeField(default=datetime.utcnow())
     avatar = db.StringField(default='',max_length=256)
 
-    weibo_id = db.StringField(unique=True)
+    weibo_id = db.StringField()
     weibo_token = db.StringField()
     
     pins_count = db.IntField(default=0)

@@ -117,6 +117,7 @@ def weibo_reg_post():
         nickname = request.form['nickname']
         user = User(weibo_id=weibo_id,
                 weibo_token=weibo_token,
+                email=weibo_id+"@weibo",
                 nickname=nickname,
                 register_at=datetime.utcnow())
 
