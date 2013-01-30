@@ -6,7 +6,7 @@
     Pinserver Blueprints Notice
 
     :author: Guo Peng (G_will) <g_will@ieqi.com> 
-    :copyright: (c) 2012-2012 by Swipppe
+    :copyright: (c) 2012-2013 by Swipppe
     
 
 """
