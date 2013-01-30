@@ -146,7 +146,7 @@ def weibo_login_post():
         user = User.objects(weibo_id=weibo_id).first()
 
         if not user:
-            return ('no this weibo user', 400)
+            return ('no this weibo user', 401)
 
         session['user_id'] = str(user.id)
         session.permanent = True
