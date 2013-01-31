@@ -52,7 +52,10 @@ def show_notices(page_num):
         limit = 5
         start = (page_num - 1) * limit
         end = page_num * limit
-        notices = Notice.objects(readed=False).order_by('-create_at')
+        notices = Notice.objects()
+
+
+
         res_data = notices_pack(notices)
         return (json.dumps(res_data), 200)
     return ('show notices session timeout', 400)
